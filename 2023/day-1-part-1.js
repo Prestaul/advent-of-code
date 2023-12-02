@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import { exec } from '../helpers/exec.js';
 
 function main(input) {
@@ -6,4 +7,4 @@ function main(input) {
     .reduce((sum, s) => sum + Number(s[0] + s.at(-1)), 0);
 }
 
-exec(main, 'day-1-input');
+exec(main, '2023/day-1-input');
