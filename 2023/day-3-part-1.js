@@ -19,9 +19,9 @@ function main(input) {
   const numbers = getMatches(/\d+/g, input, input.indexOf('\n') + 1);
   const symbols = getMatches(/[^\d\s.]/g, input, input.indexOf('\n') + 1);
 
-  return numbers.filter(
-      ({ row, col, len }) => symbols.some(({ row: r, col: c }) => Math.abs(row - r) <= 1 && (c >= col - 1 && c <= col + len))
-    ).reduce((sum, n) => sum + Number(n.val), 0);
+  return numbers
+    .filter(({ row, col, len }) => symbols.some(({ row: r, col: c }) => Math.abs(row - r) <= 1 && (c >= col - 1 && c <= col + len)))
+    .reduce((sum, n) => sum + Number(n.val), 0);
 }
 
 // ORIGINAL SOLUTION THAT I HATED
