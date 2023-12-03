@@ -1,7 +1,30 @@
 #!/usr/bin/env node
 import { exec } from '../helpers/exec.js';
 
+function getMatches(r, input, w) {
+  const out = [];
+  let s;
+  while(s = r.exec(input)) {
+    out.push({
+      val: s[0],
+      row: Math.floor(s.index / w),
+      col: s.index % w,
+      len: s[0].length,
+    });
+  }
+  return out;
+}
+
 function main(input) {
+  const numbers = getMatches(/\d+/g, input, input.indexOf('\n') + 1);
+  const symbols = getMatches(/[^\d\s.]/g, input, input.indexOf('\n') + 1);
+
+  return numbers.filter(
+      ({ row, col, len }) => symbols.some(({ row: r, col: c }) => Math.abs(row - r) <= 1 && (c >= col - 1 && c <= col + len))
+    ).reduce((sum, n) => sum + Number(n.val), 0);
+}
+
+function firstSolution(input) {
   const grid = input.split('\n').map(s => `.${s}.`.split(''));
   const h = grid.length + 1;
   const w = grid[0].length + 1;

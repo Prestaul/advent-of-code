@@ -1,7 +1,31 @@
 #!/usr/bin/env node
 import { exec } from '../helpers/exec.js';
 
+function getMatches(r, input, w) {
+  const out = [];
+  let s;
+  while(s = r.exec(input)) {
+    out.push({
+      val: s[0],
+      row: Math.floor(s.index / w),
+      col: s.index % w,
+      len: s[0].length,
+    });
+  }
+  return out;
+}
+
 function main(input) {
+  const numbers = getMatches(/\d+/g, input, input.indexOf('\n') + 1);
+  const symbols = getMatches(/\*/g, input, input.indexOf('\n') + 1);
+
+  return symbols
+    .map(({ row: r, col: c }) => numbers.filter(({ row, col, len }) => Math.abs(row - r) <= 1 && (c >= col - 1 && c <= col + len)))
+    .map(nums => nums.length === 2 ? Number(nums[0].val) * Number(nums[1].val) : 0)
+    .reduce((sum, n) => sum + n, 0);
+}
+
+function firstSolution(input) {
   const lines = input.split('\n');
   const grid = lines.map(s => `.${s}.`.split(''));
   const h = grid.length + 1;
