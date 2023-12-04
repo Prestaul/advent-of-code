@@ -1,17 +1,15 @@
 #!/usr/bin/env node
 import { exec } from '../helpers/exec.js';
+import { splitAtLength } from '../helpers/strings.js';
 
 function main(input) {
   const cards = input.split('\n');
   const copies = new Array(cards.length).fill(1);
   cards.forEach((s, c) => {
-    const [a, b] = s.split(':')[1].split(' |');
-    let w = 0;
-    for (let i = 0; i < a.length; i += 3) {
-      if (b.includes(a.substr(i, 3))) w++;
-    }
+    const [a, b] = s.split(':')[1].split(' |').map(splitAtLength(3));
+    let w = a.filter(s => b.includes(s)).length;
     while(w) copies[c + w--] += copies[c];
-  })
+  });
   return copies.reduce((sum, n) => sum + n);
 }
 

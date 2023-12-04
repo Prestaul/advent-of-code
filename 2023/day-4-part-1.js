@@ -1,16 +1,14 @@
 #!/usr/bin/env node
 import { exec } from '../helpers/exec.js';
+import { splitAtLength } from '../helpers/strings.js';
 
 function main(input) {
   let sum = 0;
   input.split('\n').forEach(s => {
-    const [a, b] = s.split(':')[1].split(' |');
-    let w = 0;
-    for (let i = 0; i < a.length; i += 3) {
-      if (b.includes(a.substr(i, 3))) w++;
-    }
+    const [a, b] = s.split(':')[1].split(' |').map(splitAtLength(3));
+    const w = a.filter(s => b.includes(s)).length;
     if (w) sum += Math.pow(2, w - 1);
-  })
+  });
   return sum;
 }
 
