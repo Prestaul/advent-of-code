@@ -7,7 +7,7 @@ function main(input) {
 
   const maps = lines.map(s => {
     const [, ...l] = s.split('\n');
-    return l.map(r => r.split(' ').map(Number)).map(([d, s, l]) => [s, s + l - 1, d - s]).sort(([a], [b]) => a - b);
+    return l.map(r => r.split(' ').map(Number)).map(([d, s, l]) => [s, s + l - 1, d - s]);
   });
 
   let seeds = [];
@@ -19,44 +19,34 @@ function main(input) {
   // console.log(maps);
 
   for (let map of maps) {
-    let nextSeeds = []
-    for (let seed of seeds) {
-      const covered = [];
-      // s = start of range, e = end of range, d = delta
-      for (let [s, e, d] of map) {
+    let nextSeeds = [];
+    let uncovered;
+    // s = start of range, e = end of range, d = delta
+    for (let [s, e, d] of map) {
+      uncovered = [];
+      for (let [start, end] of seeds) {
         // Seeds in range
-        if (seed[0] <= e && seed[1] >= s) {
-          const r = [Math.max(seed[0], s), Math.min(seed[1], e)];
-          nextSeeds.push(r.map(v => v + d));
-          covered.push(r);
-          // console.log('in range', r);
-        }
-      }
+        if (start <= e && end >= s) nextSeeds.push([Math.max(start, s) + d, Math.min(end, e) + d]);
 
-      console.log(seed, covered);
-      for (let [s, e] of covered) {
-        if (seed[0] < s) {
-          nextSeeds.push([seed[0], Math.min(seed[1], s - 1)]);
-          console.log('uncovered', [seed[0], Math.min(seed[1], s - 1)]);
-        }
-        seed[0] = e + 1;
-      }
+        // Seeds before range
+        if (start < s) uncovered.push([start, Math.min(end, s - 1)]);
 
-      if (seed[0] <= seed[1]) {
-        nextSeeds.push(seed);
-        console.log('uncovered', seed);
+        // Seeds after range
+        if (end > e) uncovered.push([Math.max(start, e + 1), end]);
       }
+      seeds = uncovered;
     }
-    seeds = nextSeeds;
+    seeds = nextSeeds.concat(uncovered);
   }
 
   return Math.min(...seeds.map(s => s[0]));
 }
 
-// exec(main, '2023/day-5-input');
+exec(main, '2023/day-5-input');
 // NOT 1289847033
 // NOT 907939499
 // NOT 477785216
+// NOT 1176891800
 
 console.log(main(`seeds: 79 14 55 13
 
