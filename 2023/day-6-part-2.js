@@ -14,8 +14,6 @@ function main(input) {
   return wins;
 }
 
-// exec(main, '2023/day-2-input');
-
 console.log(main(`Time:        51     92     68     90
 Distance:   222   2031   1126   1225`));
 // console.log(main(`Time:      7  15   30
