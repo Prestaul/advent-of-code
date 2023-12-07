@@ -18,9 +18,9 @@ function main(input) {
     const sets = Object.values(m).sort((a, b) => b - a);
     sets[0] += jokers;
 
-    return [sets[0].toString() + (sets[1] ?? 0) + cards.map(c => c.toString(16)), Number(bid)];
+    return [[sets[0],  sets[1] ?? 0, ...cards].reduce((a, b) => (a << 4) + b), Number(bid)];
   })
-  .sort(([a], [b]) => a.localeCompare(b))
+  .sort(([a], [b]) => a - b)
   .reduce((sum, [, bid], i) => sum + (i + 1) * bid, 0);
 }
 
