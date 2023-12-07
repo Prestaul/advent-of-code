@@ -1,52 +1,27 @@
 #!/usr/bin/env node
 import { exec } from '../helpers/exec.js';
 
-const VALS = {
-  2: 2,
-  3: 3,
-  4: 4,
-  5: 5,
-  6: 6,
-  7: 7,
-  8: 8,
-  9: 9,
-  T: 10,
-  J: 1,
-  Q: 12,
-  K: 13,
-  A: 14,
-};
-
-function rank(cards) {
-  const m = {};
-  for (let c of cards) m[c] = m[c] ? m[c] + 1 : 1;
-
-  const jokers = m[1] ?? 0;
-  m[1] = 0;
-
-  const sets = Object.values(m).sort((a, b) => b - a);
-  sets[0] += jokers;
-
-  if (sets[0] === 1) return 0;
-  if (sets[0] === 2 && sets[1] === 1) return 1;
-  if (sets[0] === 2 && sets[1] === 2) return 2;
-  if (sets[0] === 3 && sets[1] === 1) return 3;
-  if (sets[0] === 3 && sets[1] === 2) return 4;
-  if (sets[0] === 4) return 5;
-  if (sets[0] === 5) return 6;
-}
+const RANKS = [ 'J', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'Q', 'K', 'A'];
 
 function main(input) {
   return input.split('\n').map(l => {
-    const [h, b] = l.split(' ');
+    const [hand, bid] = l.split(' ');
 
-    const hand = Array.from(h).map(c => VALS[c]);
-    const r = rank(hand);
+    const cards = hand.split('').map(c => RANKS.indexOf(c));
 
-    return [r, hand, Number(b)];
+    const m = {};
+    for (let c of cards) m[c] = m[c] ? m[c] + 1 : 1;
+
+    const jokers = m[0] ?? 0;
+    m[0] = 0;
+
+    const sets = Object.values(m).sort((a, b) => b - a);
+    sets[0] += jokers;
+
+    return [sets[0].toString() + (sets[1] ?? 0) + cards.map(c => c.toString(16)), Number(bid)];
   })
-  .sort(([ar, ah], [br, bh]) => ar - br || ah[0] - bh[0] || ah[1] - bh[1] || ah[2] - bh[2] || ah[3] - bh[3] || ah[4] - bh[4])
-  .reduce((sum, [,, bid], i) => sum + (i + 1) * bid, 0);
+  .sort(([a], [b]) => a.localeCompare(b))
+  .reduce((sum, [, bid], i) => sum + (i + 1) * bid, 0);
 }
 
 exec(main, '2023/day-7-input');
@@ -57,11 +32,3 @@ T55J5 684
 KK677 28
 KTJJT 220
 QQQJA 483`));
-
-// console.log(main(`AJAAA 7
-// AA8JA 6
-// 23J32 5
-// TTJ98 4
-// 23432 3
-// A23J4 2
-// 23456 1`));
