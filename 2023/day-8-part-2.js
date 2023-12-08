@@ -1,29 +1,40 @@
 #!/usr/bin/env node
 import { exec } from '../helpers/exec.js';
 
+const gcd = (a, b) => a ? gcd(b % a, a): b;
+const lcm = (a, b) => a * b / gcd(a, b);
+
 function main(input) {
-  const [path, ...lines] = input.split(/\n+/g);
+  const [path, tree] = input.split('\n\n');
 
-  const tree = lines.reduce((t, l) => {
-    t[l.substring(0, 3)] = {L: l.substring(7, 10), R: l.substring(12, 15)};
-    return t;
-  }, {});
-
-  let n = input.match(/^..A/mg);
-
-  const [s, ...ps] = n.map(k => {
-    let s = 0;
-    while(k[2] !== 'Z') k = tree[k][path[s++ % path.length]];
-    return s;
-  });
-
-  let i = s;
-  while (ps.some(p => i % p)) i += s;
-
-  return i;
+  return input.match(/^..A/mg).map(n => {
+    let i = 0;
+    while(n[2] !== 'Z')
+      n = tree.substr(tree.indexOf(n + ' ') + 7 + 5 * (path[i++ % path.length] == 'R'), 3);
+    return i;
+  }).reduce(lcm);
 }
 
+// function main(input) {
+//   const [path, ...lines] = input.split(/\n+/g);
+
+//   const tree = lines.reduce((t, l) => {
+//     t[l.substring(0, 3)] = {L: l.substring(7, 10), R: l.substring(12, 15)};
+//     return t;
+//   }, {});
+
+//   let n = input.match(/^..A/mg);
+
+//   return n.map(k => {
+//     let s = 0;
+//     while(k[2] !== 'Z') k = tree[k][path[s++ % path.length]];
+//     return s;
+//   }).reduce(lcm);
+// }
+
+console.time();
 exec(main, '2023/day-8-input');
+console.timeEnd();
 // 13740108158591
 
 console.log(main(`LR
