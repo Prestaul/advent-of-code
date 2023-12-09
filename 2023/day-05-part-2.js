@@ -42,7 +42,7 @@ function main(input) {
   return Math.min(...seeds.map(s => s[0]));
 }
 
-exec(main, '2023/day-5-input');
+exec(main, '2023/day-05-input'); // 63179500
 // NOT 1289847033
 // NOT 907939499
 // NOT 477785216
@@ -80,4 +80,4 @@ temperature-to-humidity map:
 
 humidity-to-location map:
 60 56 37
-56 93 4`));
+56 93 4`)); // 46

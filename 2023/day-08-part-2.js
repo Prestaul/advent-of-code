@@ -4,17 +4,24 @@ import { exec } from '../helpers/exec.js';
 const gcd = (a, b) => a ? gcd(b % a, a): b;
 const lcm = (a, b) => a * b / gcd(a, b);
 
-function main(input) {
-  const [path, tree] = input.split('\n\n');
-
-  return input.match(/^..A/mg).map(n => {
-    let i = 0;
-    while(n[2] !== 'Z')
-      n = tree.substr(tree.indexOf(n + ' ') + 7 + 5 * (path[i++ % path.length] == 'R'), 3);
-    return i;
-  }).reduce(lcm);
+function main(s) {
+  let l = s.indexOf('\n');
+  return s.match(/^..A/mg).map(n => Array(99999).findIndex((_, i) => 'Z' == (n = s.substr(s.indexOf(n + ' ') + 7 + 5 * (s[i % l] == 'R'), 3))[2]) + 1).reduce(lcm);
 }
 
+// First golf
+// function main(input) {
+//   const [path, tree] = input.split('\n\n');
+
+//   return input.match(/^..A/mg).map(n => {
+//     let i = 0;
+//     while(n[2] !== 'Z')
+//       n = tree.substr(tree.indexOf(n + ' ') + 7 + 5 * (path[i++ % path.length] == 'R'), 3);
+//     return i;
+//   }).reduce(lcm);
+// }
+
+// Original solution
 // function main(input) {
 //   const [path, ...lines] = input.split(/\n+/g);
 
@@ -32,10 +39,7 @@ function main(input) {
 //   }).reduce(lcm);
 // }
 
-console.time();
-exec(main, '2023/day-8-input');
-console.timeEnd();
-// 13740108158591
+exec(main, '2023/day-08-input'); // 13740108158591
 
 console.log(main(`LR
 
@@ -46,7 +50,7 @@ console.log(main(`LR
 22B = (22C, 22C)
 22C = (22Z, 22Z)
 22Z = (22B, 22B)
-XXX = (XXX, XXX)`));
+XXX = (XXX, XXX)`)); // 6
 
 console.log(main(`LR
 
@@ -62,24 +66,4 @@ console.log(main(`LR
 22E = (22Z, 22Z)
 22Z = (YYY, YYY)
 YYY = (XXX, XXX)
-XXX = (22C, 22C)`));
-
-
-
-
-
-
-/*
-A A
-B B
-C Z
-D B
-E Z
-Z B
-Y Z
-X B
-C Z
-D B
-E Z
-Z B
-*/
+XXX = (22C, 22C)`)); // 4

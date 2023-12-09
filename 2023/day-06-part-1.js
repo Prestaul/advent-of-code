@@ -17,9 +17,7 @@ function main(input) {
   }).reduce((m, n) => m * n);
 }
 
-console.time()
-console.log(main(`Time:        51     92     68     90
-Distance:   222   2031   1126   1225`));
-// console.log(main(`Time:      7  15   30
-// Distance:  9  40  200`));
-console.timeEnd();
+exec(main, '2023/day-06-input'); // 500346
+
+console.log(main(`Time:      7  15   30
+Distance:  9  40  200`)); // 288
