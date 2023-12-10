@@ -11,7 +11,7 @@ function next(diffs, n, i, a) {
 }
 
 function main(input) {
-  return input.split('\n').map(l => l.match(/-?\d+/g).map(Number).reduce(next, [])).reduce((a, b) => a + b);
+  return input.split('\n').map(l => l.split(' ').map(Number).reduce(next, [])).reduce((a, b) => a + b);
 }
 
 exec(main, '2023/day-09-input'); // 1702218515
