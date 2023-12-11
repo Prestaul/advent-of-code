@@ -26,7 +26,6 @@ function main(input, startPipe) {
       .replaceAll(/\|\|/g, '')
       .match(/\|\.+\|/g)
       ?.reduce((l, s) => l + s.length - 2, 0) ?? 0;
-      // .replaceAll(/^\.+||\.+$/g, '');
   }).reduce((a, b) => a + b);
 }
 
