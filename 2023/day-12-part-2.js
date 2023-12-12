@@ -45,6 +45,14 @@ function main(input) {
     const c = count(springs, good);
     console.log(i, c);
     return c;
+
+    // console.log(i, springs, good);
+    // const a = count(springs, [...good]);
+    // const b = count(springs + '?' + springs, [...good, ...good]);
+    // if (a === b) return a;
+    // const c = count('?' + springs, [...good]);
+    // const d = count(springs + '?', [...good]);
+    // return Math.max(c, d)**4 * Math.min(c, d);
   })
   .reduce(sum, 0);
 }
