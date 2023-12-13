@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { exec } from '../helpers/exec.js';
 
-function reverse(pattern, w) {
+function transpose(pattern, w) {
   const h = pattern.length / w;
   const out = [];
   for (let i = 0; i < pattern.length; i++) out.push(pattern[(i % h) * w + Math.floor(i / h)]);
@@ -36,7 +36,7 @@ function main(input) {
   return input.split('\n\n').map(pattern => {
     const w = pattern.indexOf('\n');
     pattern = pattern.replaceAll('#', '1').replaceAll('.', '0').replaceAll('\n', '');
-    return findMirror(pattern, w) * 100 || findMirror(reverse(pattern, w), w);
+    return findMirror(pattern, w) * 100 || findMirror(transpose(pattern, w), w);
   })
   .reduce((a, b) => a + b);
 }
