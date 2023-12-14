@@ -1,93 +1,87 @@
 #!/usr/bin/env node
 import { exec } from '../helpers/exec.js';
+import { iterate } from '../helpers/iterate.js';
+
+function cycle(grid, w, h) {
+  //N
+  for (let r = 0; r < h; r++) {
+    for (let c = 0; c < w; c++) {
+      if (grid[r][c] !== 'O') continue;
+
+      let j = r;
+      while(j && grid[j - 1][c] === '.') j--;
+      if (j < r) {
+        grid[j][c] = 'O';
+        grid[r][c] = '.';
+      }
+    }
+  }
+  // console.log('N');
+  // console.log(grid.map(s => s.join('')).join('\n'));
+
+  // W
+  for (let c = 0; c < w; c++) {
+    for (let r = 0; r < h; r++) {
+      if (grid[r][c] !== 'O') continue;
+
+      let j = c;
+      while(j && grid[r][j - 1] === '.') j--;
+      if (j < c) {
+        grid[r][j] = 'O';
+        grid[r][c] = '.';
+      }
+    }
+  }
+  // console.log('W');
+  // console.log(grid.map(s => s.join('')).join('\n'));
+
+  // S
+  for (let r = h - 1; r >= 0; r--) {
+    for (let c = 0; c < w; c++) {
+      if (grid[r][c] !== 'O') continue;
+
+      let j = r;
+      while(j + 1 < h && grid[j + 1][c] === '.') j++;
+      if (j > r) {
+        grid[j][c] = 'O';
+        grid[r][c] = '.';
+      }
+    }
+  }
+  // console.log('S');
+  // console.log(grid.map(s => s.join('')).join('\n'));
+
+  // E
+  for (let c = w; c >= 0; c--) {
+    for (let r = 0; r < h; r++) {
+      if (grid[r][c] !== 'O') continue;
+
+      let j = c;
+      while(j + 1 < w && grid[r][j + 1] === '.') j++;
+      if (j > c) {
+        grid[r][j] = 'O';
+        grid[r][c] = '.';
+      }
+    }
+  }
+  // console.log('E');
+  // console.log(grid.map(s => s.join('')).join('\n'));
+  return grid;
+}
 
 function main(input) {
   const grid =  input.split('\n').map(l => l.split(''));
   const h = grid.length;
   const w = grid[0].length;
 
-  function cycle() {
-    //N
-    for (let r = 0; r < h; r++) {
-      for (let c = 0; c < w; c++) {
-        if (grid[r][c] !== 'O') continue;
-
-        let j = r;
-        while(j && grid[j - 1][c] === '.') j--;
-        if (j < r) {
-          grid[j][c] = 'O';
-          grid[r][c] = '.';
-        }
-      }
-    }
-    // console.log('N');
-    // console.log(grid.map(s => s.join('')).join('\n'));
-
-    // W
-    for (let c = 0; c < w; c++) {
-      for (let r = 0; r < h; r++) {
-        if (grid[r][c] !== 'O') continue;
-
-        let j = c;
-        while(j && grid[r][j - 1] === '.') j--;
-        if (j < c) {
-          grid[r][j] = 'O';
-          grid[r][c] = '.';
-        }
-      }
-    }
-    // console.log('W');
-    // console.log(grid.map(s => s.join('')).join('\n'));
-
-    // S
-    for (let r = h - 1; r >= 0; r--) {
-      for (let c = 0; c < w; c++) {
-        if (grid[r][c] !== 'O') continue;
-
-        let j = r;
-        while(j + 1 < h && grid[j + 1][c] === '.') j++;
-        if (j > r) {
-          grid[j][c] = 'O';
-          grid[r][c] = '.';
-        }
-      }
-    }
-    // console.log('S');
-    // console.log(grid.map(s => s.join('')).join('\n'));
-
-    // E
-    for (let c = w; c >= 0; c--) {
-      for (let r = 0; r < h; r++) {
-        if (grid[r][c] !== 'O') continue;
-
-        let j = c;
-        while(j + 1 < w && grid[r][j + 1] === '.') j++;
-        if (j > c) {
-          grid[r][j] = 'O';
-          grid[r][c] = '.';
-        }
-      }
-    }
-    // console.log('E');
-    // console.log(grid.map(s => s.join('')).join('\n'));
-    return grid.map(s => s.join('')).join('\n');
-  }
-
-  let previousCycles = new Map();
-  let cycles = 0;
-  while(cycles++ < 1000000000) {
-    const map = cycle();
-    if (previousCycles.has(map)) {
-      const first = previousCycles.get(map);
-      console.log('Cycle', cycles, 'matches cycle', first);
-      const period = cycles - first;
-      const remaining = 1000000000 - cycles;
-      let i = remaining % period;
-      while (i--) cycle();
-      break;
-    }
-    previousCycles.set(map, cycles);
-  }
+  iterate({
+    initialValue: grid,
+    args: [w, h],
+    computeNext: cycle,
+    limit: 1000000000,
+    getKey: v => v.flat().join(''),
+    // debug: (v, i) => console.log(v.map(r => r.join('')).join('\n')),
+  });
 
   return grid.map((r, i) => r.filter(c => c === 'O').length * (grid.length - i)).reduce((a, b) => a + b)
 }
