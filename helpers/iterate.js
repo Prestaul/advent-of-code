@@ -25,7 +25,7 @@ export function iterate({ computeNext, limit, initialValue, args = [], getKey = 
 
   if (loopEnd) {
     console.log('Cycle detected from', loopStart, 'to', loopEnd);
-    console.log('Skipped from ', loopEnd, 'to', resumedAt);
+    console.log('Skipped from', loopEnd, 'to', resumedAt);
   }
 
   return value;
