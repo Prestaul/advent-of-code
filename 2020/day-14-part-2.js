@@ -1,3 +1,6 @@
+#!/usr/bin/env node
+import { exec } from '../helpers/exec.js';
+
 function parseBinary(s) {
   return Number('0b' + s);
 }
@@ -7,7 +10,7 @@ function charCount(s, char) {
 }
 
 // TODO: Currently returns incorrect value for my input but works on example input
-function exec(prog) {
+function main(prog) {
   const lines = prog.split('\n');
   const mem = [];
   let sMask = '';
@@ -51,3 +54,5 @@ function exec(prog) {
 
   return mem.reduce((a, b) => a + b, 0n);
 }
+
+exec(main, '2020/day-14-input');

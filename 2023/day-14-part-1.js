@@ -3,8 +3,11 @@ import { exec } from '../helpers/exec.js';
 
 function main(input) {
   const grid =  input.split('\n').map(l => l.split(''));
-  for (let r = 0; r < grid.length; r++) {
-    for (let c = 0; c < grid[0].length; c++) {
+  const h = grid.length;
+  const w = grid[0].length;
+
+  for (let r = 0; r < h; r++) {
+    for (let c = 0; c < w; c++) {
       if (grid[r][c] !== 'O') continue;
 
       let j = r;
@@ -19,15 +22,15 @@ function main(input) {
   grid.map(s => s.join('')).join('\n');
 }
 
-exec(main, '2023/day-14-input'); //
+exec(main, '2023/day-14-input'); // 105982
 
-// console.log(main(`O....#....
-// O.OO#....#
-// .....##...
-// OO.#O....O
-// .O.....O#.
-// O.#..O.#.#
-// ..O..#O..O
-// .......O..
-// #....###..
-// #OO..#....`)); // 136
+console.log(main(`O....#....
+O.OO#....#
+.....##...
+OO.#O....O
+.O.....O#.
+O.#..O.#.#
+..O..#O..O
+.......O..
+#....###..
+#OO..#....`)); // 136

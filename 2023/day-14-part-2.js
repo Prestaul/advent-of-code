@@ -3,11 +3,13 @@ import { exec } from '../helpers/exec.js';
 
 function main(input) {
   const grid =  input.split('\n').map(l => l.split(''));
+  const h = grid.length;
+  const w = grid[0].length;
 
   function cycle() {
     //N
-    for (let r = 0; r < grid.length; r++) {
-      for (let c = 0; c < grid[0].length; c++) {
+    for (let r = 0; r < h; r++) {
+      for (let c = 0; c < w; c++) {
         if (grid[r][c] !== 'O') continue;
 
         let j = r;
@@ -22,8 +24,8 @@ function main(input) {
     // console.log(grid.map(s => s.join('')).join('\n'));
 
     // W
-    for (let c = 0; c < grid[0].length; c++) {
-      for (let r = 0; r < grid.length; r++) {
+    for (let c = 0; c < w; c++) {
+      for (let r = 0; r < h; r++) {
         if (grid[r][c] !== 'O') continue;
 
         let j = c;
@@ -38,12 +40,12 @@ function main(input) {
     // console.log(grid.map(s => s.join('')).join('\n'));
 
     // S
-    for (let r = grid.length - 1; r >= 0; r--) {
-      for (let c = 0; c < grid[0].length; c++) {
+    for (let r = h - 1; r >= 0; r--) {
+      for (let c = 0; c < w; c++) {
         if (grid[r][c] !== 'O') continue;
 
         let j = r;
-        while(j + 1 < grid.length && grid[j + 1][c] === '.') j++;
+        while(j + 1 < h && grid[j + 1][c] === '.') j++;
         if (j > r) {
           grid[j][c] = 'O';
           grid[r][c] = '.';
@@ -54,12 +56,12 @@ function main(input) {
     // console.log(grid.map(s => s.join('')).join('\n'));
 
     // E
-    for (let c = grid[0].length; c >= 0; c--) {
-      for (let r = 0; r < grid.length; r++) {
+    for (let c = w; c >= 0; c--) {
+      for (let r = 0; r < h; r++) {
         if (grid[r][c] !== 'O') continue;
 
         let j = c;
-        while(j + 1 < grid.length && grid[r][j + 1] === '.') j++;
+        while(j + 1 < w && grid[r][j + 1] === '.') j++;
         if (j > c) {
           grid[r][j] = 'O';
           grid[r][c] = '.';
@@ -90,7 +92,7 @@ function main(input) {
   return grid.map((r, i) => r.filter(c => c === 'O').length * (grid.length - i)).reduce((a, b) => a + b)
 }
 
-exec(main, '2023/day-14-input'); //
+exec(main, '2023/day-14-input'); // 85175
 
 console.log(main(`O....#....
 O.OO#....#
@@ -101,4 +103,4 @@ O.#..O.#.#
 ..O..#O..O
 .......O..
 #....###..
-#OO..#....`)); // 136
+#OO..#....`)); // 64
