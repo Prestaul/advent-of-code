@@ -8,14 +8,15 @@ function main(input, startPipe) {
   let prev;
   while(input !== prev) [input, prev] = [input.replace(disconnectedPipes, '.'), input];
 
-  return input.split('\n').map(row => {
-    return row
-      .replaceAll(/^\.+|L-*J|F-*7|\.+$/g, '') // Remove corners and edges that turn back on themselves and remove dots outside the path
-      .replaceAll(/F-*J|L-*7/g, '|') // Replace corners and edges that pass through the line with a single pipe
-      .replaceAll(/\|\|/g, '') // Remove any pairs of pipes leaving one for odd groups and none for even sized groups
-      .match(/\|\.+\|/g) // Gather every other group of dots (and surrounding pipes)
-      ?.reduce((l, s) => l + s.length - 2, 0) ?? 0; // Count 'em
-  }).reduce((a, b) => a + b);
+  return input
+    .replaceAll(/^\.+|L-*J|F-*7|\.+$/gm, '') // Remove corners and edges that turn back on themselves and remove dots outside the path
+    .replaceAll(/F-*J|L-*7/g, '|') // Replace corners and edges that pass through the line with a single pipe
+    .replaceAll(/\|\|/g, '') // Remove any pairs of pipes leaving one for odd groups and none for even sized groups
+    .split('\n').map(row =>
+      row.match(/\|\.+\|/g) // Gather every other group of dots (and surrounding pipes)
+      ?.reduce((l, s) => l + s.length - 2, 0) ?? 0 // Count 'em
+    )
+    .reduce((a, b) => a + b);
 }
 
 exec(main, '2023/day-10-input', '|'); // 337
