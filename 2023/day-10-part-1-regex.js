@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { exec } from '../helpers/exec.js';
+import { exec, test } from '../helpers/exec.js';
 
 const next = {
   N: { '|':'N', '7':'W', 'F':'E' },
@@ -8,7 +8,7 @@ const next = {
   W: { '-':'W', 'L':'N', 'F':'S' },
 };
 
-function main(input) {
+function part1(input) {
   const w  = input.indexOf('\n');
   const re = new RegExp(`[^NSEW](?=.{${w}}(N))|(?<=(S).{${w}})[^NSEW]|(?<=(E))[^NSEW]|[^NSEW](?=(W))`, 's');
   let steps = 0;
@@ -21,16 +21,16 @@ function main(input) {
   return Math.floor(steps / 2);
 }
 
-exec(main, '2023/day-10-input'); // 6820
+// exec(main, '2023/day-10-input'); // 6820
 
-console.log(main(`-L|F7
+test(part1, `-L|F7
 7S-7|
 L|7||
 -L-J|
-L|-JF`)); // 4
+L|-JF`, 4);
 
-console.log(main(`7-F7-
+test(part1, `7-F7-
 .FJ|7
 SJLL7
 |F--J
-LJ.LJ`)); // 8
+LJ.LJ`, 8);
