@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 import { exec } from '../helpers/exec.js';
 
-function hash(s, limit = null) {
+function hash(s) {
   let h = 0;
-  for (let i = 0; i < (limit ?? s.length); i++) h = (h + s.charCodeAt(i)) * 17 % 256;
+  for (let i = 0; i < s.length; i++) h = (h + s.charCodeAt(i)) * 17 % 256;
   return h;
 }
 
@@ -12,28 +12,16 @@ function part1(input) {
 }
 
 function part2(input) {
-  const boxes = new Array(256);
+  const boxes = Array(256);
 
-  input.split(',').forEach(s => {
-    const op = s.at(-1) === '-' ? '-' : '=';
-    const label = s.substring(0, s.length - (op === '-' ? 1 : 2));
-    const num = hash(label);
-    const box = boxes[num] ??= [];
+  for (let s of input.split(',')) {
+    const [, label, op, focus] = s.match(/^(.+)(\D)(\d)?$/);
+    const box = boxes[hash(label)] ??= {};
+    if (op === '=') box[label] = +focus;
+    else delete box[label];
+  }
 
-    if (op === '=') {
-      const focus = Number(s.at(-1));
-      const lens = box.find(l => l.label === label);
-      if (lens) {
-        lens.focus = focus;
-      } else {
-        box.push({ label, focus });
-      }
-    } else {
-      boxes[num] = box.filter(l => l.label !== label);
-    }
-  });
-
-  return boxes.map((box, i) => box.map(({ focus }, j) => (i + 1) * (j + 1) * focus)).flat().reduce((a, b) => a + b);
+  return boxes.map((box, i) => Object.values(box).map((focus, j) => (i + 1) * (j + 1) * focus)).flat().reduce((a, b) => a + b);
 }
 
 exec(part1, '2023/day-15-input'); // 501680
