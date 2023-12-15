@@ -4,11 +4,25 @@ import { join } from 'node:path';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
 
+function run(fn, input, ...args) {
+  console.time(' Runtime');
+  const result = fn(input, ...args);
+  console.timeEnd(' Runtime');
+  console.log('  Output:', result);
+  return result;
+}
+
 export function exec(fn, inputFile, ...args) {
   const input = readFileSync(join(ROOT, inputFile), { encoding: 'utf8' });
-  console.time('Runtime');
-  const result = fn(input, ...args);
-  console.timeEnd('Runtime');
-  console.log('Output:', result);
+  console.log(' Running:', fn.name);
+  run(fn, input, ...args);
+  console.log();
+}
+
+export function test(fn, input, ...args) {
+  console.log(' Testing:', fn.name);
+  const expected = args.pop();
+  const result = run(fn, input, ...args);
+  console.log('Expected:', expected, result != expected ? '- FAILED' : '');
   console.log();
 }

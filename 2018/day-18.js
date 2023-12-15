@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { exec } from '../helpers/exec.js';
+import { exec, test } from '../helpers/exec.js';
 import { iterate } from '../helpers/iterate.js';
 
 function count(map, r, c, type) {
@@ -55,10 +55,7 @@ function main(input, limit) {
   return map.filter(x => x === '|').length * map.filter(x => x === '#').length;
 }
 
-exec(main, '2018/day-18-input', 10); // 574590
-exec(main, '2018/day-18-input', 1000000000); // 183787
-
-console.log(main(`.#.#...|#.
+const sampleInput = `.#.#...|#.
 .....#|##|
 .|..|...#.
 ..|#.....#
@@ -67,4 +64,9 @@ console.log(main(`.#.#...|#.
 .|....|...
 ||...#|.#|
 |.||||..|.
-...#.|..|.`, 10)); // 1147
+...#.|..|.`;
+test(main, sampleInput, 10, 1147);
+
+const inputFile = '2018/day-18-input'
+exec(main, inputFile, 10); // => 574590
+exec(main, inputFile, 1_000_000_000); // => 183787

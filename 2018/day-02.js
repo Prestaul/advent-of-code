@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { exec } from '../helpers/exec.js';
+import { exec, test } from '../helpers/exec.js';
 
 function part1(input) {
   const [twos, threes] = input.split('\n').map(s => {
@@ -35,22 +35,21 @@ function part2(input) {
   }
 }
 
-exec(part1, '2018/day-02-input'); // 7533
-
-console.log(part1(`abcdef
+test(part1, `abcdef
 bababc
 abbcde
 abcccd
 aabcdd
 abcdee
-ababab`)); // 12
-
-exec(part2, '2018/day-02-input'); // mphcuasvrnjzzkbgdtqeoylva
-
-console.log(part2(`abcde
+ababab`, 12);
+test(part2, `abcde
 fghij
 klmno
 pqrst
 fguij
 axcye
-wvxyz`)); // fgij
+wvxyz`, 'fgij');
+
+const inputFile = '2018/day-02-input'
+exec(part1, inputFile); // => 7533
+exec(part2, inputFile); // => mphcuasvrnjzzkbgdtqeoylva

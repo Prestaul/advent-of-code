@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { exec } from '../helpers/exec.js';
+import { exec, test } from '../helpers/exec.js';
 
 const CHARS = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz=';
 const encode = v => CHARS.charAt(v);
@@ -42,7 +42,7 @@ function getFlood(w) {
 }
 
 const LIMIT = 1000;
-function main(input, elfDmg = 3) {
+function main(input, elfDmg) {
   /** @type {number} */
   const w  = input.indexOf('\n') + 1;
   const DIRS = {
@@ -66,7 +66,7 @@ function main(input, elfDmg = 3) {
   const goblins = new Set();
   let currentMap = Object.create(emptyMap);
   input.replace(/[EG]/g, (race, pos) => {
-    const unit = { id: encode(units.length), race, pos, hp: 200, dmg: race === 'G' ? 3 : elfDmg }
+    const unit = { id: encode(units.length), race, pos, hp: 200, dmg: !elfDmg || race === 'G' ? 3 : elfDmg }
     currentMap[pos] = unit.id;
 
     units.push(unit);
@@ -127,8 +127,10 @@ function main(input, elfDmg = 3) {
         if (target.hp <= 0) {
           delete currentMap[target.pos];
           if (target.race === 'G') goblins.delete(target);
-          else throw 'NOOOOOO!!!!'
-          // else elves.delete(target);
+          else {
+            elves.delete(target);
+            if (elfDmg) return false;
+          }
         }
       }
     }
@@ -142,14 +144,31 @@ function main(input, elfDmg = 3) {
   } while (round++ < LIMIT)
 }
 
-exec(main, '2018/day-15-input', 16); // 63168
+function part1(input) {
+  return main(input);
+}
 
-// console.log(main(`#########
-// #G......#
-// #.E.#...#
-// #..##..G#
-// #...##..#
-// #...#...#
-// #.G...G.#
-// #.....G.#
-// #########`));
+function part2(input) {
+  let dmg = 4;
+  let result;
+  do {
+    result = main(input, dmg++);
+  } while(!result)
+  return result;
+}
+
+const sampleInput = `#########
+#G......#
+#.E.#...#
+#..##..G#
+#...##..#
+#...#...#
+#.G...G.#
+#.....G.#
+#########`;
+test(part1, sampleInput, 18740);
+test(part2, sampleInput, 1140);
+
+const inputFile = '2018/day-15-input';
+exec(part1, inputFile); // => 319410
+exec(part2, inputFile); // => 63168

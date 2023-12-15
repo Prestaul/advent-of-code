@@ -1,7 +1,9 @@
 #!/usr/bin/env node
-import { exec } from '../helpers/exec.js';
+import { exec, test } from '../helpers/exec.js';
 
-function main(input) {
+// Part 1 just evals the input...
+
+function part2(input) {
   const nums = input.replaceAll('+', '').split('\n').map(Number);
   const prev = new Set();
   let val = 0;
@@ -12,14 +14,14 @@ function main(input) {
   }
 }
 
-// Part 1 just evals the input...
-exec(eval, '2018/day-01-input'); // 540
-
-// Part 2
-exec(main, '2018/day-01-input'); // 73056
-
-console.log(main(`+3
+const sampleInput = `+3
 +3
 +4
 -2
--4`)); // 10
+-4`;
+test(eval, sampleInput, 4);
+test(part2, sampleInput, 10);
+
+const inputFile = '2018/day-01-input'
+exec(eval, inputFile); // => 540
+exec(part2, inputFile); // => 73056
