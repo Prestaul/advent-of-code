@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { exec, test } from '../helpers/exec.js';
+import { Heap } from 'heap-js';
 
 function shortestPath(input, minTurns, maxTurns) {
   const grid = input.split('\n').map(l => l.split('').map(Number));
@@ -8,7 +9,8 @@ function shortestPath(input, minTurns, maxTurns) {
   const directions = Array(h + 1).fill().map(_ => Array(w + 1).fill('.').map(_ => []));;
 
   let result;
-  const frontier = [[0, 0, 0, '', 0]];
+  const frontier = new Heap((a, b) => a[2] - b[2]);
+  frontier.init([[0, 0, 0, '', 0]]);
 
   function addToFrontier(x, y, dist, dir, repetitions) {
     const val = grid[y]?.[x];
@@ -20,9 +22,7 @@ function shortestPath(input, minTurns, maxTurns) {
     if (x === w && y === h) result = dist + val;
   }
 
-  while (frontier.length && !result) {
-    frontier.sort((a, b) => b[2] - a[2] )
-    const [x, y, dist, dir, r] = frontier.pop();
+  for (const [x, y, dist, dir, r] of frontier) {
     if (r < minTurns && dir) {
       switch(dir) {
         case '>': addToFrontier(x + 1, y, dist, '>', r + 1); break;
@@ -36,9 +36,10 @@ function shortestPath(input, minTurns, maxTurns) {
       if (dir !== 'v') addToFrontier(x, y - 1, dist, '^', dir === '^' ? r + 1 : 1);
       if (dir !== '>') addToFrontier(x - 1, y, dist, '<', dir === '<' ? r + 1 : 1);
     }
+    if (result) return result;
   }
 
-  return result;
+  console.log('No result...');
 }
 
 function part1(input) {
