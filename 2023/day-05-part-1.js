@@ -1,9 +1,9 @@
 #!/usr/bin/env node
-import { exec } from '../helpers/exec.js';
+import { exec, test } from '../helpers/exec.js';
 
 function main(input) {
   const [l1, ...lines] = input.split('\n\n');
-  const seeds = l1.split('\n\n')[0].match(/\d+/g).map(Number);
+  const [, ...seeds] = l1.split(' ').map(Number);
 
   const ranges = lines.map(s => {
     const [, ...l] = s.split('\n');
@@ -23,9 +23,7 @@ function main(input) {
   return Math.min(...locations);
 }
 
-exec(main, '2023/day-05-input'); // 265018614
-
-console.log(main(`seeds: 79 14 55 13
+test(main, `seeds: 79 14 55 13
 
 seed-to-soil map:
 50 98 2
@@ -57,4 +55,6 @@ temperature-to-humidity map:
 
 humidity-to-location map:
 60 56 37
-56 93 4`)); // 35
+56 93 4`, 35);
+
+exec(main, '2023/day-05-input'); // 265018614
