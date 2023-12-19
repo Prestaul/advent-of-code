@@ -1,17 +1,29 @@
 #!/usr/bin/env node
 import { exec, test } from '../helpers/exec.js';
 
-function parse(input, withParts = false) {
+function parse(input) {
   const [in1, in2] = input.split('\n\n');
 
   const parts = in2.split('\n').map(l => l.match(/\d+/g).map(Number)).map(([x,m,a,s]) => ({x,m,a,s}));
 
   const rules = Object.fromEntries(in1.split('\n').map(l => {
-    const [xmas, list] = l.slice(0, -1).split('{');
-    return [xmas, list.split(',').map(r => {
+    const [key, list] = l.slice(0, -1).split('{');
+    const outcomes = new Set();
+    const steps = list.split(',').map(r => {
       const [, xmas, op, val, dest] = r.match(/^(?:([xmas])([><])(\d+):)?(\w+)$/);
-      return { xmas, op, val: val && +val, dest };
-    })]
+      outcomes.add(dest);
+      // `<` is exclusive to the left and inclusive to the right, as are our compression ranges
+      // `>` is exclusive to the right and inclusive to the left so we shift by one to match our compression ranges
+      if (op === '>') return { xmas, op, val: +val + 1, dest };
+      if (xmas) return { xmas, op, val: +val, dest };
+      return { dest };
+    });
+
+    // If all outcomes are the same then use a single step
+    if (outcomes.size === 1)
+      return [key, [{ dest: [...outcomes][0] }]];
+
+    return [key, steps]
   }));
 
   return { parts, rules };
@@ -24,25 +36,21 @@ function compress(rules) {
     a: new Set([1, 4000]),
     s: new Set([1, 4000]),
   };
+  const counts = {};
+  const sizes = {};
 
   // Collect values from rules
   for (const rule of Object.values(rules))
-    for (const { xmas, val } of rule)
+    for (const { xmas, op, val } of rule)
       if (xmas && val)
         indices[xmas].add(val);
 
-  const sizes = {};
-  const counts = {};
   // Create indices
   for (const xmas of 'xmas') {
     indices[xmas] = [...indices[xmas]].sort((a, b) => a - b);
-    sizes[xmas] = indices[xmas].map((n, i) => indices[xmas][i + 1] - n || 1),
     counts[xmas] = indices[xmas].length;
+    sizes[xmas] = indices[xmas].map((n, i) => indices[xmas][i + 1] - n || 1);
   }
-
-  // console.log(indices);
-  // console.log(sizes);
-  // console.log(counts, counts.x * counts.m * counts.a * counts.s);
 
   // Compress rules
   for (const rule of Object.values(rules))
@@ -52,12 +60,13 @@ function compress(rules) {
   return {
     indices,
     counts,
+    sizes,
     uncompress: ({x,m,a,s}) => sizes.x[x] * sizes.m[m] * sizes.a[a] * sizes.s[s],
   };
 }
 
 function validate(part, [{ xmas, op, val, dest}, ...nextRule], rules) {
-  if (op === '>' && part[xmas] <= val) return validate(part, nextRule, rules);
+  if (op === '>' && part[xmas] < val) return validate(part, nextRule, rules);
   if (op === '<' && part[xmas] >= val) return validate(part, nextRule, rules);
   if (dest === 'A') return true;
   if (dest === 'R') return false;
@@ -71,22 +80,21 @@ function part1(input) {
 
 function part2(input) {
   const { rules } = parse(input);
-  const { counts, indices, uncompress } = compress(rules);
+  const { counts, uncompress } = compress(rules);
 
+  // console.log(indices);
+  // console.log(sizes);
+  // console.log(rules);
   // console.log(counts);
-  // console.log('total', counts.x * counts.m * counts.a * counts.s);
+  // console.log('Parts to test:', counts.x * counts.m * counts.a * counts.s);
 
+  let i = 0;
   let sum = 0;
   for (let x = counts.x; x--;)
     for (let m = counts.m; m--;)
       for (let a = counts.a; a--;)
         for (let s = counts.s; s--;)
-          if (validate({ x, m, a, s }, rules.in, rules)) {
-            console.log('valid', { x, m, a, s });
-            sum += uncompress({ x, m, a, s });
-          }
-
-  console.log(indices);
+          if (validate({ x, m, a, s }, rules.in, rules)) sum += uncompress({ x, m, a, s });
 
   return sum;
 }
@@ -114,4 +122,4 @@ test(part2, sampleInput, 167409079868000);
 
 const inputFile = '2023/day-19-input';
 exec(part1, inputFile); // => 280909
-// exec(part2, inputFile); // =>
+exec(part2, inputFile); // => 116138474394508

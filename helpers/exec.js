@@ -5,10 +5,12 @@ import { join } from 'node:path';
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
 
 function run(fn, input, ...args) {
+  const start = Date.now();
   console.time(' Runtime');
   const result = fn(input, ...args);
   console.timeEnd(' Runtime');
   console.log('  Output:', result);
+  if (Date.now() - start > 60000) process.stdout.write('\u0007'); // Bell
   return result;
 }
 
