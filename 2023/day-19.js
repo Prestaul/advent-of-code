@@ -6,10 +6,10 @@ function parse(input) {
 
   const parts = in2.split('\n').map(l => l.match(/\d+/g).map(Number)).map(([x,m,a,s]) => ({x,m,a,s}));
 
-  const rules = Object.fromEntries(in1.split('\n').map(l => {
+  const workflows = Object.fromEntries(in1.split('\n').map(l => {
     const [key, list] = l.slice(0, -1).split('{');
     const outcomes = new Set();
-    const steps = list.split(',').map(r => {
+    const rules = list.split(',').map(r => {
       const [, xmas, op, val, dest] = r.match(/^(?:([xmas])([><])(\d+):)?(\w+)$/);
       outcomes.add(dest);
       // `<` is exclusive to the left and inclusive to the right, as are our compression ranges
@@ -23,13 +23,13 @@ function parse(input) {
     if (outcomes.size === 1)
       return [key, [{ dest: [...outcomes][0] }]];
 
-    return [key, steps]
+    return [key, rules]
   }));
 
-  return { parts, rules };
+  return { parts, workflows };
 }
 
-function compress(rules) {
+function compress(worlflows) {
   const indices = {
     x: new Set([1, 4000]),
     m: new Set([1, 4000]),
@@ -39,9 +39,9 @@ function compress(rules) {
   const counts = {};
   const sizes = {};
 
-  // Collect values from rules
-  for (const rule of Object.values(rules))
-    for (const { xmas, op, val } of rule)
+  // Collect values from worlflows
+  for (const workflow of Object.values(worlflows))
+    for (const { xmas, op, val } of workflow)
       if (xmas && val)
         indices[xmas].add(val);
 
@@ -52,10 +52,10 @@ function compress(rules) {
     sizes[xmas] = indices[xmas].map((n, i) => indices[xmas][i + 1] - n || 1);
   }
 
-  // Compress rules
-  for (const rule of Object.values(rules))
-    for (const step of rule)
-      if (step.xmas && step.val) step.val = indices[step.xmas].indexOf(step.val);
+  // Compress worlflows
+  for (const workflow of Object.values(worlflows))
+    for (const rule of workflow)
+      if (rule.xmas && rule.val) rule.val = indices[rule.xmas].indexOf(rule.val);
 
   return {
     indices,
@@ -65,26 +65,26 @@ function compress(rules) {
   };
 }
 
-function validate(part, [{ xmas, op, val, dest}, ...nextRule], rules) {
-  if (op === '>' && part[xmas] < val) return validate(part, nextRule, rules);
-  if (op === '<' && part[xmas] >= val) return validate(part, nextRule, rules);
+function validate(part, [{ xmas, op, val, dest}, ...nextRule], workflows) {
+  if (op === '>' && part[xmas] < val) return validate(part, nextRule, workflows);
+  if (op === '<' && part[xmas] >= val) return validate(part, nextRule, workflows);
   if (dest === 'A') return true;
   if (dest === 'R') return false;
-  return validate(part, rules[dest], rules);
+  return validate(part, workflows[dest], workflows);
 }
 
 function part1(input) {
-  const { parts, rules } = parse(input, true);
-  return parts.filter(part => validate(part, rules.in, rules)).reduce((sum, {x,m,a,s}) => sum + x+m+a+s, 0)
+  const { parts, workflows } = parse(input, true);
+  return parts.filter(part => validate(part, workflows.in, workflows)).reduce((sum, {x,m,a,s}) => sum + x+m+a+s, 0)
 }
 
 function part2(input) {
-  const { rules } = parse(input);
-  const { counts, uncompress } = compress(rules);
+  const { workflows } = parse(input);
+  const { counts, uncompress } = compress(workflows);
 
   // console.log(indices);
   // console.log(sizes);
-  // console.log(rules);
+  // console.log(workflows);
   // console.log(counts);
   // console.log('Parts to test:', counts.x * counts.m * counts.a * counts.s);
 
@@ -94,7 +94,7 @@ function part2(input) {
     for (let m = counts.m; m--;)
       for (let a = counts.a; a--;)
         for (let s = counts.s; s--;)
-          if (validate({ x, m, a, s }, rules.in, rules)) sum += uncompress({ x, m, a, s });
+          if (validate({ x, m, a, s }, workflows.in, workflows)) sum += uncompress({ x, m, a, s });
 
   return sum;
 }
@@ -122,4 +122,4 @@ test(part2, sampleInput, 167409079868000);
 
 const inputFile = '2023/day-19-input';
 exec(part1, inputFile); // => 280909
-exec(part2, inputFile); // => 116138474394508
+// exec(part2, inputFile); // => 116138474394508

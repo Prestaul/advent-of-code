@@ -25,6 +25,6 @@ export function test(fn, input, ...args) {
   console.log(' Testing:', fn.name);
   const expected = args.pop();
   const result = run(fn, input, ...args);
-  console.log('Expected:', expected, result != expected ? '- FAILED' : '');
+  console.log('Expected:', expected, result != expected ? '-\x1b[31m FAILED\x1b[0m' : '');
   console.log();
 }

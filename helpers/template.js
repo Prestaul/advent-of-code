@@ -14,6 +14,6 @@ const sampleInput = `
 test(part1, sampleInput, 6);
 // test(part2, sampleInput, 123);
 
-const inputFile = 'YYYY/day-DD-input';
+const inputFile = '2023/day-DD-input';
 // exec(part1, inputFile); // =>
 // exec(part2, inputFile); // =>
