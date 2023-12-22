@@ -14,7 +14,7 @@ function dropBlocks(input) {
       return this.x0 <= block.x1 && block.x0 <= this.x1
           && this.y0 <= block.y1 && block.y0 <= this.y1;
     },
-  }
+  };
 
   // Parse and sort blocks
   const blocks = input.split('\n')
@@ -44,9 +44,7 @@ function getSupportBlocks(blocks) {
   });
 }
 
-function destroy(block, destroyed) {
-  destroyed ??= new Set([ block ]);
-
+function destroy(block, destroyed = new Set([ block ])) {
   for (const a of block.above) {
     if (a.below.every(b => destroyed.has(b))) {
       destroyed.add(a);
@@ -83,7 +81,5 @@ test(part2, sampleInput, 7);
 const inputFile = '2023/day-22-input';
 exec(part1, inputFile); // => 413
 exec(part2, inputFile); // => 41610
-// LOW 1216 1163
-// HIGH 107258
 exec(part1, '2023/day-22-input-shannon'); // => 424
 exec(part2, '2023/day-22-input-shannon'); // => 55483
