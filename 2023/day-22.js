@@ -16,6 +16,7 @@ function dropBlocks(input) {
     },
   }
 
+  // Parse and sort blocks
   const blocks = input.split('\n')
     .map(l => l.match(/\d+/g)
     .map(Number))
@@ -26,11 +27,13 @@ function dropBlocks(input) {
     .toSorted((a, b) => a.z0 - b.z0);
 
   for (const block of blocks) {
+    // Drop as low as possible
     while (block.z0 > 1 && block.below.every(b => !b.overlaps(block))) {
       block.z0 -= 1;
       block.z1 -= 1;
     }
 
+    // Add to index
     for (let z = block.z0; z <= block.z1; z++) (blocksByLayer[z] ??= []).push(block);
   }
 
@@ -85,4 +88,3 @@ exec(part1, inputFile); // => 413
 exec(part2, inputFile); // => 41610
 // LOW 1216 1163
 // HIGH 107258
-exec(part2, '2023/day-22-input-shannon'); // => 55483
