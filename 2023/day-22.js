@@ -2,14 +2,13 @@
 import { exec, test } from '../helpers/exec.js';
 
 function dropBlocks(input) {
-  const blocksByZ0 = [];
-  const blocksByZ1 = [];
+  const blocksByLayer = [];
   const protoBlock = {
-    above() {
-      return blocksByZ0[this.z1 + 1]?.filter(b => b.overlaps(this)) ?? [];
+    get above() {
+      return blocksByLayer[this.z1 + 1]?.filter(b => b.overlaps(this)) ?? [];
     },
-    below() {
-      return blocksByZ1[this.z0 - 1]?.filter(b => b.overlaps(this)) ?? [];
+    get below() {
+      return blocksByLayer[this.z0 - 1]?.filter(b => b.overlaps(this)) ?? [];
     },
     overlaps(block) {
       return this.x0 <= block.x1 && block.x0 <= this.x1
@@ -26,19 +25,13 @@ function dropBlocks(input) {
     }))
     .toSorted((a, b) => a.z0 - b.z0);
 
-  dropBlocks: for (let i = 0; i < blocks.length; i++) {
-    const block = blocks[i];
-    let { z0, z1 } = block;
-
-    for (let z = z0; z > 0; z--) {
-      if (z === 1 || blocksByZ1[z - 1]?.some(b => b.overlaps(block))) {
-        block.z0 = z;
-        block.z1 = z + z1 - z0;
-        (blocksByZ0[block.z0] ??= []).push(block);
-        (blocksByZ1[block.z1] ??= []).push(block);
-        continue dropBlocks;
-      }
+  for (const block of blocks) {
+    while (block.z0 > 1 && block.below.every(b => !b.overlaps(block))) {
+      block.z0 -= 1;
+      block.z1 -= 1;
     }
+
+    for (let z = block.z0; z <= block.z1; z++) (blocksByLayer[z] ??= []).push(block);
   }
 
   return blocks;
@@ -46,16 +39,16 @@ function dropBlocks(input) {
 
 function getSupportBlocks(blocks) {
   return blocks.filter(block => {
-    const supporting = block.above();
-    return supporting.length > 0 && supporting.some(b => b.below().length === 1);
+    const supporting = block.above;
+    return supporting.length > 0 && supporting.some(b => b.below.length === 1);
   });
 }
 
 function destroy(block, destroyed) {
   destroyed ??= new Set([ block ]);
 
-  for (const a of block.above()) {
-    if (a.below().every(b => destroyed.has(b))) {
+  for (const a of block.above) {
+    if (a.below.every(b => destroyed.has(b))) {
       destroyed.add(a);
       destroy(a, destroyed);
     }
@@ -92,3 +85,4 @@ exec(part1, inputFile); // => 413
 exec(part2, inputFile); // => 41610
 // LOW 1216 1163
 // HIGH 107258
+exec(part2, '2023/day-22-input-shannon'); // => 55483
