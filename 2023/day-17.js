@@ -8,7 +8,6 @@ function shortestPath(input, minTurns, maxTurns) {
   let w = grid[0].length - 1;
   const directions = Array(h + 1).fill().map(_ => Array(w + 1).fill('.').map(_ => []));;
 
-  let result;
   const frontier = new Heap((a, b) => a[2] - b[2]);
   frontier.init([[0, 0, 0, '', 0]]);
 
@@ -18,11 +17,11 @@ function shortestPath(input, minTurns, maxTurns) {
 
     frontier.push([x, y, dist + val, dir, repetitions]);
     directions[y][x].push(dir + repetitions);
-
-    if (x === w && y === h) result = dist + val;
   }
 
   for (const [x, y, dist, dir, r] of frontier) {
+    if (x === w && y === h && r >= minTurns) return dist;
+
     if (r < minTurns && dir) {
       switch(dir) {
         case '>': addToFrontier(x + 1, y, dist, '>', r + 1); break;
@@ -36,7 +35,6 @@ function shortestPath(input, minTurns, maxTurns) {
       if (dir !== 'v') addToFrontier(x, y - 1, dist, '^', dir === '^' ? r + 1 : 1);
       if (dir !== '>') addToFrontier(x - 1, y, dist, '<', dir === '<' ? r + 1 : 1);
     }
-    if (result) return result;
   }
 
   console.log('No result...');
@@ -66,7 +64,15 @@ const sampleInput = `
 4322674655533`.trim();
 test(part1, sampleInput, 102);
 test(part2, sampleInput, 94);
+test(part2, `
+111111111111
+999999999991
+999999999991
+999999999991
+999999999991
+`.trim(), 71);
 
 const inputFile = '2023/day-17-input';
 exec(part1, inputFile); // => 843
 exec(part2, inputFile); // => 1017
+exec(part2, '2023/day-17-input-shannon'); // => 1294
