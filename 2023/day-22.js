@@ -20,10 +20,7 @@ function dropBlocks(input) {
   const blocks = input.split('\n')
     .map(l => l.match(/\d+/g)
     .map(Number))
-    .map(([x0,y0,z0,x1,y1,z1]) => Object.assign(Object.create(protoBlock), {
-      x0: Math.min(x0,x1), y0: Math.min(y0,y1), z0: Math.min(z0,z1),
-      x1: Math.max(x0,x1), y1: Math.max(y0,y1), z1: Math.max(z0,z1),
-    }))
+    .map(([x0,y0,z0,x1,y1,z1]) => Object.assign(Object.create(protoBlock), { x0, y0, z0, x1, y1, z1 }))
     .toSorted((a, b) => a.z0 - b.z0);
 
   for (const block of blocks) {
@@ -88,3 +85,5 @@ exec(part1, inputFile); // => 413
 exec(part2, inputFile); // => 41610
 // LOW 1216 1163
 // HIGH 107258
+exec(part1, '2023/day-22-input-shannon'); // => 424
+exec(part2, '2023/day-22-input-shannon'); // => 55483
