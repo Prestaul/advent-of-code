@@ -65,7 +65,7 @@ function getGraph(input) {
   return graph;
 }
 
-function DFS(graph, destination, { node: i = 0, dist = 0 } = {}, visited = new Set()) {
+function longestPath(graph, destination, { node: i = 0, dist = 0 } = {}, visited = new Set()) {
   if (i === destination) return dist;
 
   visited.add(i);
@@ -73,7 +73,7 @@ function DFS(graph, destination, { node: i = 0, dist = 0 } = {}, visited = new S
   const maxDistance = Math.max(
     ...graph[i].edges
       .filter(({ node }) => !visited.has(node))
-      .map(edge => DFS(graph, destination, edge, visited))
+      .map(edge => longestPath(graph, destination, edge, visited))
   );
 
   visited.delete(i);
@@ -84,7 +84,7 @@ function DFS(graph, destination, { node: i = 0, dist = 0 } = {}, visited = new S
 function part2(input) {
   const graph = getGraph(input);
   const h = input.split('\n').length - 1;
-  return DFS(graph, graph.findIndex(({ r }) => r === h));
+  return longestPath(graph, graph.findIndex(({ r }) => r === h));
 }
 
 const sampleInput = `

@@ -4,10 +4,10 @@ import { exec, test } from '../helpers/exec.js';
 function dropBlocks(input) {
   const blocksByLayer = [];
   const protoBlock = {
-    get above() {
+    above() {
       return blocksByLayer[this.z1 + 1]?.filter(b => b.overlaps(this)) ?? [];
     },
-    get below() {
+    below() {
       return blocksByLayer[this.z0 - 1]?.filter(b => b.overlaps(this)) ?? [];
     },
     overlaps(block) {
@@ -25,7 +25,7 @@ function dropBlocks(input) {
 
   for (const block of blocks) {
     // Drop as low as possible
-    while (block.z0 > 1 && block.below.every(b => !b.overlaps(block))) {
+    while (block.z0 > 1 && block.below().every(b => !b.overlaps(block))) {
       block.z0 -= 1;
       block.z1 -= 1;
     }
@@ -39,15 +39,15 @@ function dropBlocks(input) {
 
 function getSupportBlocks(blocks) {
   return blocks.filter(block => {
-    const supporting = block.above;
-    return supporting.length > 0 && supporting.some(b => b.below.length === 1);
+    const supporting = block.above();
+    return supporting.length > 0 && supporting.some(b => b.below().length === 1);
   });
 }
 
-function destroy(block, destroyed = new Set([ block ])) {
-  for (const a of block.above) {
-    if (a.below.every(b => destroyed.has(b))) {
-      destroyed.add(a);
+function destroy(block, destroyed = new Set()) {
+  destroyed.add(block);
+  for (const a of block.above()) {
+    if (a.below().every(b => destroyed.has(b))) {
       destroy(a, destroyed);
     }
   }
