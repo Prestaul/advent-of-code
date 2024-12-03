@@ -114,6 +114,6 @@ const sampleInput = `
 // test(part1, sampleInput, 94);
 test(part2, sampleInput, 154);
 
-const inputFile = '2023/day-23-input';
+const inputFile = '2023/day-23-input.txt';
 // exec(part1, inputFile); // => 2366
 exec(part2, inputFile); // => 6682

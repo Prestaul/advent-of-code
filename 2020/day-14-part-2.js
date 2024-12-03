@@ -55,4 +55,4 @@ function main(prog) {
   return mem.reduce((a, b) => a + b, 0n);
 }
 
-exec(main, '2020/day-14-input');
+exec(main, '2020/day-14-input.txt');

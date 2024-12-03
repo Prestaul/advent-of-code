@@ -57,4 +57,4 @@ humidity-to-location map:
 60 56 37
 56 93 4`, 35);
 
-exec(main, '2023/day-05-input'); // 265018614
+exec(main, '2023/day-05-input.txt'); // 265018614

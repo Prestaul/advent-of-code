@@ -14,7 +14,7 @@ function main(input) {
   return wins;
 }
 
-exec(main, '2023/day-06-input'); // 42515755
+exec(main, '2023/day-06-input.txt'); // 42515755
 
 console.log(main(`Time:      7  15   30
 Distance:  9  40  200`)); // 71503

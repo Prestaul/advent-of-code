@@ -44,7 +44,7 @@ function main(input, expansion = 999999) {
   return d;
 }
 
-exec(main, '2023/day-11-input'); // 568914596391
+exec(main, '2023/day-11-input.txt'); // 568914596391
 
 console.log(main(`...#......
 .......#..

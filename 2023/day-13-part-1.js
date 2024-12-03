@@ -27,7 +27,7 @@ function main(input) {
   }).reduce((a, b) => a + b);
 }
 
-exec(main, '2023/day-13-input'); // 32723
+exec(main, '2023/day-13-input.txt'); // 32723
 
 console.log(main(`#.##..##.
 ..#.##.#.

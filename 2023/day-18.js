@@ -94,6 +94,6 @@ U 2 (#7a21e3)`.trim();
 test(part1, sampleInput, 3, 3, 62);
 test(part2, sampleInput, 952408144115);
 
-const inputFile = '2023/day-18-input';
+const inputFile = '2023/day-18-input.txt';
 exec(part1, inputFile, 290, 5); // => 48652
 exec(part2, inputFile); // => 45757884535661

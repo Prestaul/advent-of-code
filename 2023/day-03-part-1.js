@@ -61,7 +61,7 @@ function main(input) {
 //   return sum;
 // }
 
-exec(main, '2023/day-03-input'); // 538046
+exec(main, '2023/day-03-input.txt'); // 538046
 
 console.log(main(`467..114..
 ...*......

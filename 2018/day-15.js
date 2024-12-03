@@ -169,6 +169,6 @@ const sampleInput = `#########
 test(part1, sampleInput, 18740);
 test(part2, sampleInput, 1140);
 
-const inputFile = '2018/day-15-input';
+const inputFile = '2018/day-15-input.txt';
 exec(part1, inputFile); // => 319410
 exec(part2, inputFile); // => 63168

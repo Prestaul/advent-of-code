@@ -86,7 +86,7 @@ function main(input) {
   return grid.map((r, i) => r.filter(c => c === 'O').length * (grid.length - i)).reduce((a, b) => a + b)
 }
 
-exec(main, '2023/day-14-input'); // 85175
+exec(main, '2023/day-14-input.txt'); // 85175
 
 console.log(main(`O....#....
 O.OO#....#

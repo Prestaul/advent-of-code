@@ -40,6 +40,6 @@ const sampleInput = `#1 @ 1,3: 4x4
 test(part1, sampleInput, 5);
 test(part2, sampleInput, 3);
 
-const inputFile = '2018/day-03-input';
+const inputFile = '2018/day-03-input.txt';
 exec(part1, inputFile); // => 115304
 exec(part2, inputFile); // => 275

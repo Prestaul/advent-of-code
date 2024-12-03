@@ -25,4 +25,4 @@ const sampleInput = `3   4
 3   3`;
 
 test(main, sampleInput, 11);
-exec(main, '2024/day-01-input'); // 1722302
+exec(main, '2024/day-01-input.txt'); // 1722302

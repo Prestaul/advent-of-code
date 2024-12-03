@@ -27,4 +27,4 @@ const sampleInput = `7 6 4 2 1
 1 3 6 7 9`;
 
 test(main, sampleInput, 2);
-exec(main, '2024/day-02-input');
+exec(main, '2024/day-02-input.txt');

@@ -57,7 +57,7 @@ function main(input) {
   .reduce(sum, 0);
 }
 
-exec(main, '2023/day-12-input'); // 548241300348335
+exec(main, '2023/day-12-input.txt'); // 548241300348335
 
 console.time();
 // console.log(main(`??????.???? 1,1`)); // 525152

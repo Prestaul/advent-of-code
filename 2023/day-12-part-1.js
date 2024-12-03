@@ -38,7 +38,7 @@ function main(input) {
   }).reduce(sum, 0);
 }
 
-exec(main, '2023/day-12-input'); // 7506
+exec(main, '2023/day-12-input.txt'); // 7506
 
 console.log(main(`???.### 1,1,3
 .??..??...?##. 1,1,3

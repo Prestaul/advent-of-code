@@ -120,6 +120,6 @@ hdj{m>838:A,pv}
 test(part1, sampleInput, 19114);
 test(part2, sampleInput, 167409079868000);
 
-const inputFile = '2023/day-19-input';
+const inputFile = '2023/day-19-input.txt';
 exec(part1, inputFile); // => 280909
 // exec(part2, inputFile); // => 116138474394508

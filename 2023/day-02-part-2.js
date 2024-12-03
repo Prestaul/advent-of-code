@@ -9,7 +9,7 @@ function main(input) {
   ).reduce((sum, n) => sum + n, 0);
 }
 
-exec(main, '2023/day-02-input'); // 72227
+exec(main, '2023/day-02-input.txt'); // 72227
 
 console.log(main(`Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green
 Game 2: 1 blue, 2 green; 3 green, 4 blue, 1 red; 1 green, 1 blue

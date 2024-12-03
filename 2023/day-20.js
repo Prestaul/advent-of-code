@@ -129,7 +129,7 @@ broadcaster -> a
 
 // test(part2, sampleInput, 123);
 
-const inputFile = '2023/day-20-input';
+const inputFile = '2023/day-20-input.txt';
 exec(part1, inputFile); // => 825896364
 exec(part2, inputFile); // =>
 

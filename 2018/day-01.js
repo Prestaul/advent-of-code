@@ -22,6 +22,6 @@ const sampleInput = `+3
 test(eval, sampleInput, 4);
 test(part2, sampleInput, 10);
 
-const inputFile = '2018/day-01-input'
+const inputFile = '2018/day-01-input.txt'
 exec(eval, inputFile); // => 540
 exec(part2, inputFile); // => 73056
