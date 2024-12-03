@@ -72,7 +72,7 @@ test(part2, `
 999999999991
 `.trim(), 71);
 
-const inputFile = '2023/day-17-input.txt';
+const inputFile = 'inputs/2023/day-17.txt';
 exec(part1, inputFile); // => 843
 exec(part2, inputFile); // => 1017
 exec(part2, '2023/day-17-input-shannon'); // => 1294

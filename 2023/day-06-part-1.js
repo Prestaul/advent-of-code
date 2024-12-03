@@ -17,7 +17,7 @@ function main(input) {
   }).reduce((m, n) => m * n);
 }
 
-exec(main, '2023/day-06-input.txt'); // 500346
+exec(main, 'inputs/2023/day-06.txt'); // 500346
 
 console.log(main(`Time:      7  15   30
 Distance:  9  40  200`)); // 288

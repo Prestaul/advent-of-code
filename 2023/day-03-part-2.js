@@ -82,7 +82,7 @@ function main(input) {
 //   return sum;
 // }
 
-exec(main, '2023/day-03-input.txt'); // 81709807
+exec(main, 'inputs/2023/day-03.txt'); // 81709807
 
 console.log(main(`467..114..
 ...*......

@@ -50,6 +50,6 @@ fguij
 axcye
 wvxyz`, 'fgij');
 
-const inputFile = '2018/day-02-input.txt'
+const inputFile = 'inputs/2018/day-02.txt'
 exec(part1, inputFile); // => 7533
 exec(part2, inputFile); // => mphcuasvrnjzzkbgdtqeoylva

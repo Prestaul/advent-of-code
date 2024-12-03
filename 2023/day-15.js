@@ -28,6 +28,6 @@ const sampleInput = `rn=1,cm-,qp=3,cm=2,qp-,pc=4,ot=9,ab=5,pc-,pc=6,ot=7`;
 test(part1, sampleInput, 1320);
 test(part2, sampleInput, 145);
 
-const inputFile = '2023/day-15-input.txt'
+const inputFile = 'inputs/2023/day-15.txt'
 exec(part1, inputFile); // => 501680
 exec(part2, inputFile); // => 241094

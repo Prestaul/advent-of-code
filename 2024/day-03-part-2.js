@@ -9,4 +9,4 @@ function main(input) {
 const sampleInput = `xmul(2,4)&mul[3,7]!^don't()_mul(5,5)+mul(32,64](mul(11,8)undo()?mul(8,5))`;
 
 test(main, sampleInput, 48);
-exec(main, '2024/day-03-input.txt'); // 82868252
+exec(main, 'inputs/2024/day-03.txt'); // 82868252

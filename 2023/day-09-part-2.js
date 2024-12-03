@@ -14,7 +14,7 @@ function main(input) {
   return input.split('\n').map(l => l.split(' ').map(Number).reduce(next, [])).reduce((a, b) => a + b);
 }
 
-exec(main, '2023/day-09-input.txt'); // 925
+exec(main, 'inputs/2023/day-09.txt'); // 925
 
 console.log(main(`0 3 6 9 12 15
 1 3 6 10 15 21

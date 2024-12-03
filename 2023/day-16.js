@@ -99,6 +99,6 @@ const sampleInput = `
 test(part1, sampleInput, 46);
 test(part2, sampleInput, 51);
 
-const inputFile = '2023/day-16-input.txt';
+const inputFile = 'inputs/2023/day-16.txt';
 exec(part1, inputFile); // => 7076
 exec(part2, inputFile); // => 7324

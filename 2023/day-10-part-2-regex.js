@@ -40,5 +40,5 @@ F-J..|FJLJ|FJ|F7|.LJ
 -F..FJL-7.||.||||...
 ....L---J.LJ.LJLJ...`.trim(), 'F', 8);
 
-const inputFile = '2023/day-10-input.txt';
+const inputFile = 'inputs/2023/day-10.txt';
 exec(part2, inputFile, '|'); // => 337

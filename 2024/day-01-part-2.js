@@ -24,4 +24,4 @@ const sampleInput = `3   4
 3   3`;
 
 test(main, sampleInput, 31);
-exec(main, '2024/day-01-input.txt');
+exec(main, 'inputs/2024/day-01.txt');

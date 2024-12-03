@@ -86,6 +86,6 @@ position=<-3,  6> velocity=< 2, -1>`.trim();
 test(part1, sampleInput, 'HI');
 // test(part2, sampleInput, 123);
 
-const inputFile = '2018/day-10-input.txt';
+const inputFile = 'inputs/2018/day-10.txt';
 exec(part1, inputFile); // =>
 // exec(part2, inputFile); // =>
