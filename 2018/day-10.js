@@ -87,5 +87,5 @@ test(part1, sampleInput, 'HI');
 // test(part2, sampleInput, 123);
 
 const inputFile = 'inputs/2018/day-10.txt';
-exec(part1, inputFile); // =>
-// exec(part2, inputFile); // =>
+exec(part1, inputFile);
+// exec(part2, inputFile);

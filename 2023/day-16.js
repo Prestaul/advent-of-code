@@ -100,5 +100,5 @@ test(part1, sampleInput, 46);
 test(part2, sampleInput, 51);
 
 const inputFile = 'inputs/2023/day-16.txt';
-exec(part1, inputFile); // => 7076
-exec(part2, inputFile); // => 7324
+exec(part1, inputFile, 7076);
+exec(part2, inputFile, 7324);

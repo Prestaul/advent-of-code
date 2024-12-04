@@ -22,7 +22,7 @@ function main(input) {
   grid.map(s => s.join('')).join('\n');
 }
 
-exec(main, 'inputs/2023/day-14.txt'); // 105982
+exec(main, 'inputs/2023/day-14.txt', 105982);
 
 console.log(main(`O....#....
 O.OO#....#

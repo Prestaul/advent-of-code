@@ -73,6 +73,6 @@ test(part2, `
 `.trim(), 71);
 
 const inputFile = 'inputs/2023/day-17.txt';
-exec(part1, inputFile); // => 843
-exec(part2, inputFile); // => 1017
-exec(part2, '2023/day-17-input-shannon'); // => 1294
+exec(part1, inputFile, 843);
+exec(part2, inputFile, 1017);
+exec(part2, '2023/day-17-input-shannon', 1294);

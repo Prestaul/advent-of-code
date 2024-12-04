@@ -20,7 +20,7 @@ function main(input) {
 //     .reduce((sum, s) => sum + Number(s[0] + s.at(-1)), 0);
 // }
 
-exec(main, 'inputs/2023/day-01.txt'); // 54578
+exec(main, 'inputs/2023/day-01.txt', 54578);
 
 console.log(main(`two1nine
 eightwothree

@@ -21,7 +21,7 @@ function part1(input) {
   return Math.floor(steps / 2);
 }
 
-// exec(main, 'inputs/2023/day-10.txt'); // 6820
+// exec(main, 'inputs/2023/day-10.txt', 6820);
 
 test(part1, `-L|F7
 7S-7|

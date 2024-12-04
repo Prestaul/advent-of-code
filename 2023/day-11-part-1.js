@@ -42,7 +42,7 @@ function main(input) {
   return d;
 }
 
-exec(main, 'inputs/2023/day-11.txt'); // 9734203
+exec(main, 'inputs/2023/day-11.txt', 9734203);
 
 console.log(main(`...#......
 .......#..

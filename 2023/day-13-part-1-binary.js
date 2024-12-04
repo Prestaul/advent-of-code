@@ -33,7 +33,7 @@ function main(input) {
   .reduce((a, b) => a + b);
 }
 
-exec(main, 'inputs/2023/day-13.txt'); // 32723
+exec(main, 'inputs/2023/day-13.txt', 32723);
 
 console.log(main(`#.##..##.
 ..#.##.#.

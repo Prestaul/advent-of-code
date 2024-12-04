@@ -31,7 +31,7 @@ function main(s) {
 //   return i;
 // }
 
-exec(main, 'inputs/2023/day-08.txt'); // 11309
+exec(main, 'inputs/2023/day-08.txt', 11309);
 
 console.log(main(`RL
 

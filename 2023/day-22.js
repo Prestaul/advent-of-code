@@ -79,7 +79,7 @@ test(part1, sampleInput, 5);
 test(part2, sampleInput, 7);
 
 const inputFile = 'inputs/2023/day-22.txt';
-exec(part1, inputFile); // => 413
-exec(part2, inputFile); // => 41610
-exec(part1, '2023/day-22-input-shannon'); // => 424
-exec(part2, '2023/day-22-input-shannon'); // => 55483
+exec(part1, inputFile, 413);
+exec(part2, inputFile, 41610);
+exec(part1, '2023/day-22-input-shannon', 424);
+exec(part2, '2023/day-22-input-shannon', 55483);

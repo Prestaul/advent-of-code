@@ -130,7 +130,7 @@ broadcaster -> a
 // test(part2, sampleInput, 123);
 
 const inputFile = 'inputs/2023/day-20.txt';
-exec(part1, inputFile); // => 825896364
-exec(part2, inputFile); // =>
+exec(part1, inputFile, 825896364);
+exec(part2, inputFile);
 
 console.log([3911,3907,3929,4057].reduce(lcm))

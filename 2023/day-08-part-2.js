@@ -39,7 +39,7 @@ function main(s) {
 //   }).reduce(lcm);
 // }
 
-exec(main, 'inputs/2023/day-08.txt'); // 13740108158591
+exec(main, 'inputs/2023/day-08.txt', 13740108158591);
 
 console.log(main(`LR
 

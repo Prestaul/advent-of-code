@@ -24,7 +24,7 @@ function main(input) {
   .reduce((sum, [, bid], i) => sum + (i + 1) * bid, 0);
 }
 
-exec(main, 'inputs/2023/day-07.txt'); // 246894760
+exec(main, 'inputs/2023/day-07.txt', 246894760);
 
 console.log(main(`32T3K 765
 T55J5 684

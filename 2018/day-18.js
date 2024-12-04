@@ -68,5 +68,5 @@ const sampleInput = `.#.#...|#.
 test(main, sampleInput, 10, 1147);
 
 const inputFile = 'inputs/2018/day-18.txt'
-exec(main, inputFile, 10); // => 574590
-exec(main, inputFile, 1_000_000_000); // => 183787
+exec(main, inputFile, 574590, 10);
+exec(main, inputFile, 183787, 1_000_000_000);

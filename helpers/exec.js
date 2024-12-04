@@ -14,16 +14,16 @@ function run(fn, input, ...args) {
   return result;
 }
 
-export function exec(fn, inputFile, ...args) {
+export function exec(fn, inputFile, expected, ...args) {
   const input = readFileSync(join(ROOT, inputFile), { encoding: 'utf8' });
   console.log(' Running:', fn.name);
-  run(fn, input, ...args);
+  const result = run(fn, input, ...args);
+  if (expected) console.log('Expected:', expected, result != expected ? '-\x1b[31m FAILED\x1b[0m' : '');
   console.log();
 }
 
-export function test(fn, input, ...args) {
+export function test(fn, input, expected, ...args) {
   console.log(' Testing:', fn.name);
-  const expected = args.pop();
   const result = run(fn, input, ...args);
   console.log('Expected:', expected, result != expected ? '-\x1b[31m FAILED\x1b[0m' : '');
   console.log();

@@ -41,5 +41,5 @@ test(part1, sampleInput, 5);
 test(part2, sampleInput, 3);
 
 const inputFile = 'inputs/2018/day-03.txt';
-exec(part1, inputFile); // => 115304
-exec(part2, inputFile); // => 275
+exec(part1, inputFile, 115304);
+exec(part2, inputFile, 275);

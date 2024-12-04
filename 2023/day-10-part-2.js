@@ -87,7 +87,7 @@ function main(input) {
   return c;
 }
 
-exec(main, 'inputs/2023/day-10.txt'); // 337
+exec(main, 'inputs/2023/day-10.txt', 337);
 
 console.log(main(`...........
 .S-------7.

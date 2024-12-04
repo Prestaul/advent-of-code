@@ -41,4 +41,4 @@ F-J..|FJLJ|FJ|F7|.LJ
 ....L---J.LJ.LJLJ...`.trim(), 'F', 8);
 
 const inputFile = 'inputs/2023/day-10.txt';
-exec(part2, inputFile, '|'); // => 337
+exec(part2, inputFile, 337, '|');
