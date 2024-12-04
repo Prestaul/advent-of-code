@@ -1,36 +1,34 @@
 #!/usr/bin/env node
 import { exec, test } from '../helpers/exec.js';
 
-function count(str, pattern) {
-  const regex = new RegExp(pattern, 'gs');
-  let i = 0, match;
-  while(match = regex.exec(str)) {
-    i++;
-    regex.lastIndex = match.index + 1;
-  }
-  return i;
+function matchCount(strings, patterns) {
+  const regexes = patterns.map(p => new RegExp(p, 'gs'));
+
+  let count = 0, match;
+  for (const str of strings)
+    for (const regex of regexes)
+      while(match = regex.exec(str))
+        (count++, regex.lastIndex = match.index + 1);
+
+  return count;
 }
 
 function part1(input) {
   const ll = input.indexOf('\n');
-  const tupni = Array.from(input).toReversed().join('');
-  return count(input, `XMAS`)
-    + count(input, `X.{${ll - 1}}M.{${ll - 1}}A.{${ll - 1}}S`)
-    + count(input, `X.{${ll}}M.{${ll}}A.{${ll}}S`)
-    + count(input, `X.{${ll + 1}}M.{${ll + 1}}A.{${ll + 1}}S`)
-    + count(tupni, `XMAS`)
-    + count(tupni, `X.{${ll - 1}}M.{${ll - 1}}A.{${ll - 1}}S`)
-    + count(tupni, `X.{${ll}}M.{${ll}}A.{${ll}}S`)
-    + count(tupni, `X.{${ll + 1}}M.{${ll + 1}}A.{${ll + 1}}S`)
+  return matchCount([input, Array.from(input).toReversed().join('')], [
+    `XMAS`,
+    `X.{${ll - 1}}M.{${ll - 1}}A.{${ll - 1}}S`,
+    `X.{${ll}}M.{${ll}}A.{${ll}}S`,
+    `X.{${ll + 1}}M.{${ll + 1}}A.{${ll + 1}}S`
+  ]);
 }
 
 function part2(input) {
-  const ll = input.indexOf('\n');
-  const tupni = Array.from(input).toReversed().join('');
-  return count(input, `M.M.{${ll - 1}}A.{${ll - 1}}S.S`)
-    + count(input, `M.S.{${ll - 1}}A.{${ll - 1}}M.S`)
-    + count(tupni, `M.M.{${ll - 1}}A.{${ll - 1}}S.S`)
-    + count(tupni, `M.S.{${ll - 1}}A.{${ll - 1}}M.S`)
+  const ll = input.indexOf('\n') - 1;
+  return matchCount([input, Array.from(input).toReversed().join('')], [
+    `M.M.{${ll}}A.{${ll}}S.S`,
+    `M.S.{${ll}}A.{${ll}}M.S`
+  ]);
 }
 
 const sampleInput = `

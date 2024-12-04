@@ -3,26 +3,28 @@ import { exec, test } from '../helpers/exec.js';
 
 function part1(input) {
   const lines = input.split('\n');
+  const chars = Object.entries('XMAS');
   let count = 0;
 
   for (let y = 0; y < lines.length; y++)
     for (let x = 0; x < lines[y].length; x++)
       for (let dy = -1; dy <= 1; dy++)
         for (let dx = -1; dx <= 1; dx++)
-          if (Object.entries('XMAS').every(([i, v]) => lines[y + i * dy]?.[x + i * dx] === v)) count++;
+          if (chars.every(([i, v]) => lines[y + i * dy]?.[x + i * dx] === v)) count++;
 
   return count;
 }
 
 function part2(input) {
   const lines = input.split('\n');
+  const chars = Object.entries('MAS');
   let count = 0;
 
   for (let y = 1; y < lines.length - 1; y++)
     for (let x = 1, matches = 0; x < lines[y].length - 1; x++, count += matches === 2 ? 1 : 0, matches = 0)
       for (let dy = -1; dy <= 1; dy += 2)
         for (let dx = -1; dx <= 1 && matches < 2; dx += 2)
-          if (Object.entries('MAS').every(([i, v]) => lines[y + (i - 1) * dy]?.[x + (i - 1) * dx] === v)) matches++;
+          if (chars.every(([i, v]) => lines[y + (i - 1) * dy]?.[x + (i - 1) * dx] === v)) matches++;
 
   return count;
 }
