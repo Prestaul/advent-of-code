@@ -1,21 +1,24 @@
 #!/usr/bin/env node
 import { exec, test } from '../helpers/exec.js';
 
+// 154 chars
 function golf(i, p) {
-  return i.split`\n\n`[1].split`\n`.map(u => u.split`,`).map(u=>[u,u.toSorted((a,b)=>-i.includes(a+'|'+b))]).filter(([u,s])=>p^u.every((v,i)=>v===s[i])).reduce((a,u)=>a+ +u[p][(u[p].length-1)/2],0);
+  return i.match(/.+,.+/gm).map(u => u.split`,`)
+    .map(u=>[u,u.toSorted((a,b)=>-i.includes(a+'|'+b))])
+    .reduce((a,u)=>p^``+u[0]==u[1]?a+ +u[p][(u[p].length-1)/2]:a,0)
 }
 
 // Pass `part - 1` as second arg. i.e. for part one pass zero
 function commented(input, part) {
   return input
-    // Drop the rules and parse the updates
-    .split('\n\n')[1].split('\n').map(u => u.split(','))
+    // Parse lines with commas into lists of pages
+    .match(/.+,.+/gm).map(u => u.split(','))
     // Sort and return both the original and sorted pages
     .map(u => [u, u.toSorted((a, b) => -input.includes(a + '|' + b))])
-    // Where sorted pages do or do not match the original depending on part
-    .filter(([u, sorted]) => part ^ u.every((_, i) => u[i] === sorted[i]))
-    // Sum the middle pages from orifinal or sorted depending on part
-    .reduce((acc, u) => acc + Number(u[part][(u[part].length - 1)/2]), 0);
+    // Convert lists to strings to see if they are the same
+    .reduce((acc,u)=>part^``+u[0]==u[1]
+    // Sum the middle pages from original or sorted depending on part
+    ?acc+ +u[part][(u[part].length-1)/2]:acc,0)
 }
 
 const sampleInput = `
