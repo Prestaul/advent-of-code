@@ -12,7 +12,7 @@ function golf(i, p) {
 function commented(input, part) {
   return input
     // Parse lines with commas into lists of pages
-    .match(/.+,.+/gm).map(u => u.split(','))
+    .match(/.+,.+/gm).map(u => u.split`,`)
     // Sort and return both the original and sorted pages
     .map(u => [u, u.toSorted((a, b) => -input.includes(a + '|' + b))])
     // Convert lists to strings to see if they are the same
