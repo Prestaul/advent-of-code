@@ -14,6 +14,6 @@ const sampleInput = `
 test(part1, sampleInput, 6);
 // test(part2, sampleInput, 123);
 
-const inputFile = '2024/day-DD-input.txt';
+const inputFile = 'inputs/2024/day-DD.txt';
 // exec(part1, inputFile);
 // exec(part2, inputFile);
