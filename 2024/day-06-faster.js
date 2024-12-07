@@ -40,18 +40,16 @@ function part2(input) {
 
   let count = 0;
 
-  for(let i = 0; i < w; i++)
-    for(let j = 0; j < h; j++)
-      if (iGrid[j][i] === 'X') {
-        const grid = input.split('\n').map(l => l.split(''));
+  for(let i = 0; i < w; i++) for(let j = 0; j < h; j++) if (iGrid[j][i] === 'X') {
+    const grid = input.split('\n').map(l => l.split(''));
 
-        grid[j][i] = '#';
+    grid[j][i] = '#';
 
-        walk(input, grid, (x, y) => {
-          if (grid[y][x] === '+' && ++count) return false;
-          grid[y][x] = '+';
-        });
-      }
+    walk(input, grid, (x, y) => {
+      if (grid[y][x] === '+' && ++count) return false;
+      grid[y][x] = '+';
+    });
+  }
 
   return count;
 }
