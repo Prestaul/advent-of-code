@@ -1,59 +1,34 @@
 #!/usr/bin/env node
 import { exec, test } from '../helpers/exec.js';
 
-function parseInput(input) {
+function part1(input) {
+  // Generate memory blocks containing files segments or empty spaces.
+  const mem = [...input].flatMap((length, i) => Array.from({ length }, () => i % 2 ? -1 : i / 2));
+
+  for (let l = 0, r = mem.length - 1; l < r; l++) {
+    // Find empty space from left side, find file blocks from right side
+    if (mem[l] >= 0) continue;
+    while (mem[r] < 0) r--;
+
+    // Swap empty space with file block
+    [mem[l], mem[r]] = [mem[r], mem[l]];
+  }
+
   let pos = 0;
-  // Create memory blocks for each file and empty space.
-  return [...input].map(Number).map((size, i) => {
+  return mem.reduce((sum, i) => sum + (~i && i) * pos++, 0);
+}
+
+function part2(input) {
+  // Get list of files and empty space.
+  let pos = 0;
+  const mem = [...input].map(Number).map((size, i) => {
     const mem = { pos, size, id: i % 2 ? null : i / 2 };
     pos += size;
     return mem;
   });
-}
-
-function checksum(mem) {
-  return mem.reduce((sum, f) => {
-    if (f.id) while (f.size--) sum += f.id * f.pos++;
-    return sum;
-  }, 0);
-}
-
-function part1(input) {
-  const mem = parseInput(input);
-
-  // Files from right side
-  let r = mem.length - 1;
-  // Empty space from left side
-  for (let l = 1; l < r; l += 2) {
-    const space = mem[l];
-    let available = space.size;
-    while (available) {
-      const file = mem[r];
-      if (file.size <= available) {
-        // Move the file and take memory from the space
-        file.pos = space.pos;
-        available = space.size -= file.size;
-        space.pos += file.size;
-        r -= 2;
-      } else {
-        // Overwrite the space with a section of the file
-        space.id = file.id;
-        file.size -= space.size;
-        available = 0;
-      }
-    }
-  }
-
-  return checksum(mem);
-}
-
-
-function part2(input) {
-  const mem = parseInput(input);
 
   // Loop through files and insert them into empty spaces.
-  let i = mem.length;
-  nextFile: while (i--) {
+  nextFile: for (let i = mem.length; i--;) {
     const f = mem[i];
     if (!f.id) continue; // Ignore empty spaces
 
@@ -71,7 +46,10 @@ function part2(input) {
     }
   }
 
-  return checksum(mem);
+  return mem.reduce((sum, { id, size, pos }) => {
+    if (id) while (size--) sum += id * pos++;
+    return sum;
+  }, 0);
 }
 
 const sampleInput = `
