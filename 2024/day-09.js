@@ -1,59 +1,55 @@
 #!/usr/bin/env node
 import { exec, test } from '../helpers/exec.js';
 
-function part1(input) {
-  input = [...input].map(Number);
-
-  let sum = 0, pos = 0;
-  let l = 0, r = input.length - 1;
-
-  // First file from right side
-  let idRight = r / 2;
-  let sizeRight = input[r];
-
-  do {
-    // Insert file from left side
-    const id = l / 2;
-    let size = +input[l];
-    while (size--) sum += id * pos++;
-
-    // Fill space
-    let space = +input[++l];
-    while (space--) {
-      if (!sizeRight--) {
-        // Next file from right side
-        r -= 2;
-        idRight = r / 2;
-        sizeRight = +input[r] - 1;
-      }
-
-      sum += idRight * pos++;
-    }
-  } while (++l < r);
-
-  // Whatever is left over from last file from left side
-  while (sizeRight--) sum += idRight * pos++;
-
-  return sum;
+function parseInput(input) {
+  let pos = 0;
+  // Create memory blocks for each file and empty space.
+  return [...input].map(Number).map((size, i) => {
+    const mem = { pos, size, id: i % 2 ? null : i / 2 };
+    pos += size;
+    return mem;
+  });
 }
 
-function part2(input) {
-  const mem = [];
+function checksum(mem) {
+  return mem.reduce((sum, f) => {
+    if (f.id) while (f.size--) sum += f.id * f.pos++;
+    return sum;
+  }, 0);
+}
 
-  // Create memory blocks for each file and empty space.
-  for (let i = 0, pos = 0; i < input.length; i++) {
-    const id = i / 2;
+function part1(input) {
+  const mem = parseInput(input);
 
-    let size = +input[i];
-    mem.push({ pos, size, id });
-    pos += size;
-
-    if (++i < input.length) {
-      size = +input[i];
-      mem.push({ pos, size });
-      pos += size;
+  // Files from right side
+  let r = mem.length - 1;
+  // Empty space from left side
+  for (let l = 1; l < r; l += 2) {
+    const space = mem[l];
+    let available = space.size;
+    while (available) {
+      const file = mem[r];
+      if (file.size <= available) {
+        // Move the file and take memory from the space
+        file.pos = space.pos;
+        available = space.size -= file.size;
+        space.pos += file.size;
+        r -= 2;
+      } else {
+        // Overwrite the space with a section of the file
+        space.id = file.id;
+        file.size -= space.size;
+        available = 0;
+      }
     }
   }
+
+  return checksum(mem);
+}
+
+
+function part2(input) {
+  const mem = parseInput(input);
 
   // Loop through files and insert them into empty spaces.
   let i = mem.length;
@@ -75,11 +71,7 @@ function part2(input) {
     }
   }
 
-  // Checksum
-  return mem.reduce((sum, f) => {
-    if (f.id) while (f.size--) sum += f.id * f.pos++;
-    return sum;
-  }, 0);
+  return checksum(mem);
 }
 
 const sampleInput = `
