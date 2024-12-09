@@ -7,21 +7,23 @@ function part1(z,s=0) {
 
 // Init sum as arg to avoid needing var/let/const
 function part1Expanded(input, sum = 0) {
-  // For each memory block length in input...
-  const mem = [...input].flatMap((length, id) =>
-    // ...insert `length` memory blocks with the file's id
-    Array.from({ length }, () =>
-      // If empty space then use -1 in place of an id
-      id % 2 ? -1 : id / 2
-    )
-  );
-
   for (
+    // On loop initialization:
+    // For each memory block length in input...
+    let mem = [...input].flatMap((length, id) =>
+      // ...insert `length` memory blocks with the file's id
+      Array.from({ length }, () =>
+        // If empty space then use -1 in place of an id
+        id % 2 ? -1 : id / 2
+      )
+    ),
     // Set up pointers at left and right ends
-    let l = 0, r = mem.length - 1, id;
+    l = 0, r = mem.length - 1, id;
+
     // Before each iteration:
     // Get id from left and quit loop if left and right pointers converge
     id = mem[l], l <= r;
+
     // After each iteration:
     // Add the id to the checksum and move the left pointer
     sum += id * l++
