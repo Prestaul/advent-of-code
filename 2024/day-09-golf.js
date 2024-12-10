@@ -59,31 +59,6 @@ function part2(input) {
   return sum;
 }
 
-function part2Expanded(input) {
-  // Get list of files and empty space.
-  let pos = 0;
-  const mem = [...input].map((size, id) => {
-    size=+size
-    const mem = { pos, size, id: id % 2 ? null : id / 2 };
-    pos += size;
-    return mem;
-  });
-
-  let sum = 0;
-  for (let r = mem.length - 1, file; file = mem[r], r >= 0; r -= 2) {
-    for (let l = 1, space; space = mem[l], l < r; l += 2)
-      if (file.size <= space.size) {
-        file.pos = space.pos;
-        space.size -= file.size;
-        space.pos += file.size;
-        break;
-      }
-    while (file.size--) sum += file.id * file.pos++;
-  }
-
-  return sum;
-}
-
 //  left pointer  v
 //         input  00...111...2...333.44.5555.6666.777.888899
 // right pointer                                           ^
@@ -98,4 +73,4 @@ exec(part1Expanded, inputFile, 6430446922192);
 
 test(part2, sampleInput, 2858);
 exec(part2, inputFile, 6460170593016);
-exec(part2Expanded, inputFile, 6460170593016);
+// exec(part2Expanded, inputFile, 6460170593016);
