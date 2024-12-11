@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { exec, test } from '../helpers/exec.js';
+import { memoize } from '../helpers/memoize.js';
 
 function direct(input, blinks) {
   let stones = input.match(/\d+/g), newStones = [];
@@ -33,16 +34,13 @@ function recursive(input, blinks) {
 }
 
 function memoized(input, blinks) {
-  const memo = {};
-  function blink(stone, n) {
-    return memo[''+[stone, n]] ??= (() => {
-      if (n === 0) return 1;
-      if (stone === '0') return blink('1', n - 1);
-      if (stone.length % 2) return blink('' + stone * 2024, n - 1);
-      return blink(stone.substring(0, stone.length / 2), n - 1)
-        + blink('' + +stone.substring(stone.length / 2), n - 1);
-    })();
-  }
+  const blink = memoize((stone, n) => {
+    if (n === 0) return 1;
+    if (stone === '0') return blink('1', n - 1);
+    if (stone.length % 2) return blink('' + stone * 2024, n - 1);
+    return blink(stone.substring(0, stone.length / 2), n - 1)
+      + blink('' + +stone.substring(stone.length / 2), n - 1);
+  });
 
   return input.match(/\d+/g).map(s => blink(s, blinks)).reduce((a, b) => a + b);
 }
