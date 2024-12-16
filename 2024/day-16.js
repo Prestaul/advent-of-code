@@ -2,102 +2,67 @@
 import { exec, test } from '../helpers/exec.js';
 import { Heap } from 'heap-js';
 
-const dirs = [
-  [ 0, -1],
-  [ 1,  0],
-  [ 0,  1],
-  [-1,  0],
-];
-
-function part1(input) {
+function solve(input, part) {
   const grid = input.split('\n').map(l => l.split(''));
-  const s = input.indexOf('S');
   const w = grid[0].length, h = grid.length;
+  const s = input.indexOf('S');
+  const xs = s % (w + 1), ys = Math.floor(s / (w + 1));
 
-  const costs = Array(h).fill().map(_ => Array(w).fill().map(_ => ({ [-1]: [Infinity], [0]: [Infinity, Infinity], [1]: [Infinity] })));
+  const costs = Array(h).fill().map(_ => Array(w).fill().map(_ => ({
+    [-1]: [Infinity],
+    [ 0]: { [-1]: Infinity, [1]: Infinity },
+    [ 1]: [Infinity]
+  })));
 
+  // Walk the cheapest paths until we reach the exit
   const frontier = new Heap((a, b) => a[4] - b[4]);
-  frontier.init([[ s % (w + 1), Math.floor(s / (w + 1)), 1, 0, 0 ]]);
+  frontier.init([[xs, ys, 1, 0, 0 ]]); // x, y, dx, dy, cost
 
   function addToFrontier(x, y, dx, dy, cost) {
-    x += dx;
-    y += dy;
-
-    if (grid[y][x] === '#') return;
-
-    const c = costs[y][x][dy][dx];
-    if (cost >= c) return;
+    // Cost to leave the cell in this direction
+    if (Number.isFinite(costs[y][x][dy][dx])) return;
     costs[y][x][dy][dx] = cost;
 
-    frontier.push([x, y, dx, dy, cost]);
+    frontier.push([x + dx, y + dy, dx, dy, cost]);
   }
 
   for (let [ x, y, dx, dy, cost ] of frontier) {
-    if (grid[y][x] === 'E') return cost;
+    if (grid[y][x] === '#') continue;
+    if (grid[y][x] === 'E')
+      return part === 1 ? cost : count(grid, costs, cost, x, y);
 
-    addToFrontier( x, y,  dx,  dy, cost + 1 );
-    addToFrontier( x, y, -dy,  dx, cost + 1001 );
-    addToFrontier( x, y,  dy, -dx, cost + 1001 );
+    addToFrontier(x, y,  dx,  dy, cost + 1);
+    addToFrontier(x, y, -dy,  dx, cost + 1001);
+    addToFrontier(x, y,  dy, -dx, cost + 1001);
   }
 }
 
-function part2(input) {
-  const grid = input.split('\n').map(l => l.split(''));
-  const s = input.indexOf('S');
-  const e = input.indexOf('E');
-  const w = grid[0].length, h = grid.length;
-  const xs = s % (w + 1);
-  const ys = Math.floor(s / (w + 1));
-  const xl = e % (w + 1);
-  const yl = Math.floor(e / (w + 1));
-
-  const costs = Array(h).fill().map(_ => Array(w).fill().map(_ => Array(4).fill(Infinity)));
-
-  const frontier = new Heap((a, b) => a[3] - b[3]);
-  frontier.init([[xs, ys, 1, 0 ]]);
-
-  function addToFrontier(x, y, d, cost) {
-    const [dx, dy] = dirs[d];
-    const x2 = x + dx, y2 = y + dy;
-
-    if (grid[y2][x2] === '#') return;
-
-    const c = costs[y][x][d];
-    if (cost >= c) return;
-    costs[y][x][d] = cost;
-
-    frontier.push([x2, y2, d, cost]);
-  }
-
-  for (let [ x, y, d, cost ] of frontier) {
-    if (grid[y][x] === 'E') return count2(grid, costs, xl, yl);
-
-    addToFrontier(x, y, d, cost + 1);
-    addToFrontier(x, y, (d + 1) % 4, cost + 1001);
-    addToFrontier(x, y, (d + 3) % 4, cost + 1001);
-  }
-}
-
-function count2(grid, costs, xs, ys) {
+function count(grid, costs, bestCost, xs, ys) {
+  // Walk decreasing costs from end until we reach the start
   const frontier = new Heap((a, b) => b[2] - a[2]);
-  frontier.init([[ xs, ys, costs[ys+1][xs][0] ]]);
-  const visited = new Set([`${xs},${ys}`]);
+  frontier.init([[ xs, ys, bestCost ]]);
 
-  function addToFrontier(x, y, cost, d) {
-    const c = costs[y][x][(d + 2) % 4];
+  function addToFrontier(x, y, dx, dy, cost) {
+    x += dx, y += dy;
+    // Cost to enter this cell from the opposite direction
+    const c = costs[y][x][-dy][-dx];
     if (c > cost) return;
     frontier.push([x, y, c]);
   }
 
+  let visited = 0;
   for (const [ x, y, cost ] of frontier) {
-    visited.add(`${x},${y}`);
-    if (grid[y][x] === 'S') return visited.size;
-    dirs.forEach(([dx, dy], d) => {
-      addToFrontier( x + dx, y + dy, cost, d);
-    });
+    if (grid[y][x] !== 'O') visited++;
+    grid[y][x] = 'O';
+
+    addToFrontier(x, y,  0, -1, cost);
+    addToFrontier(x, y,  1,  0, cost);
+    addToFrontier(x, y,  0,  1, cost);
+    addToFrontier(x, y, -1,  0, cost);
   }
 
-  throw new Error('No result...');
+  // console.log(grid.map(l => l.join('')).join('\n'));
+  return visited;
 }
 
 const inputFile = 'inputs/2024/day-16.txt';
@@ -136,10 +101,10 @@ const sample2 = `
 #S#.............#
 #################`.trim();
 
-test(part1, sampleInput, 7036);
-test(part1, sample2, 11048);
-exec(part1, inputFile);
+test(solve, sampleInput, 7036, 1);
+test(solve, sample2, 11048, 1);
+exec(solve, inputFile, 83432, 1);
 
-test(part2, sampleInput, 45);
-test(part2, sample2, 64);
-exec(part2, inputFile);
+test(solve, sampleInput, 45, 2);
+test(solve, sample2, 64, 2);
+exec(solve, inputFile, 467, 2);
