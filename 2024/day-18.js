@@ -19,11 +19,12 @@ function part1(input, { size, bytes }) {
   }
 }
 
-function part2(input, { size, bytes }) {
+function part2(input, { size }) {
   const lines = input.split('\n');
-  while (++bytes < lines.length)
-    if(!part1(input, { size, bytes }))
-      return lines[bytes-1];
+  let bytes = lines.length;
+  while (bytes--)
+    if(part1(input, { size, bytes }))
+      return lines[bytes];
 }
 
 const inputFile = 'inputs/2024/day-18.txt';
@@ -57,5 +58,5 @@ const sampleInput = `
 test(part1, sampleInput, 22, { size: 6, bytes: 12 });
 exec(part1, inputFile, 310, { size: 70, bytes: 1024 });
 
-test(part2, sampleInput, '6,1', { size: 6, bytes: 12 });
-exec(part2, inputFile, null, { size: 70, bytes: 1024 });
+test(part2, sampleInput, '6,1', { size: 6 });
+exec(part2, inputFile, null, { size: 70 });
