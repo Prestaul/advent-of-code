@@ -51,29 +51,29 @@ function runScript({ A, program }) {
 }
 
 function runCompiled(A) {
-  let B = 0n, C = 0n;
+  let B = 0, C = 0;
   let out = [];
-  while(A !== 0n) {
-    B = A & 7n;  // Read 3 bits (0,1,2,3,4,5,6,7)
-    B = B ^ 5n;  // Randomize B (5,4,7,6,1,0,3,2)
+  while(A !== 0) {
+    B = A & 7;  // Read 3 bits (0,1,2,3,4,5,6,7)
+    B = B ^ 5;  // Randomize B (5,4,7,6,1,0,3,2)
     C = A >> B; // C from A
-    B = B ^ 6n;  // Randomize B (3,2,1,0,7,6,5,4)
+    B = B ^ 6;  // Randomize B (3,2,1,0,7,6,5,4)
     B = B ^ C;  // New initial B (0 - 7)
-    out.push(B & 7n); // 5, 5
-    A = A >> 3n; // Reduce A
+    out.push(B & 7); // 5, 5
+    A = Math.trunc(A  / 8); // Reduce A
   } // 3, 0
   return out;
 }
 
 
-function part2(expected, n, A = 0n) {
+function part2(expected, n, A = 0) {
   // Start at the end
   n ??= expected.length - 1;
 
   // Increment through all possible octal digits in a single position
   // Numbers look like nonsense in decimal, but in octal it's easy to see
-  const inc = 8n ** BigInt(n);
-  for (let i = 0n; i < 8n; i++)
+  const inc = 8 ** n;
+  for (let i = 0; i < 8; i++)
     if (runCompiled(A + i * inc)[n] === expected[n]) {
       // Found it!
       if (n === 0) return A + i * inc;
@@ -88,9 +88,9 @@ test(runScript, {
   A: 729,
   program: [0,1,5,4,3,0]
 }, '4,6,3,5,6,3,5,2,1,0');
-test(part2, [2,4,1,5,7,5,1,6,4,1,5,5,0,3,3,0].map(BigInt), 107413700225434n);
+test(part2, [2,4,1,5,7,5,1,6,4,1,5,5,0,3,3,0], 107413700225434);
 test(
   runCompiled,
-  107413700225434n, // octal 3033046334424632,
+  107413700225434, // octal 3033046334424632,
   '2,4,1,5,7,5,1,6,4,1,5,5,0,3,3,0'
 );
