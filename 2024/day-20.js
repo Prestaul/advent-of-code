@@ -1,19 +1,15 @@
 #!/usr/bin/env node
 import { exec, test } from '../helpers/exec.js';
-
-const dirs = [[0, 1], [1, 0], [0, -1], [-1, 0]];
+import { getGrid, NESW } from '../helpers/grid.js';
 
 function solve(input, time, limit = 100) {
-  const grid = input.split('\n').map(l => l.split(''));
-  const w = grid[0].length, h = grid.length;
-  const dist = Array(h).fill().map(_ => Array(w).fill(Infinity));
-  const s = input.indexOf('S');
+  const { grid, w, h, coords, filled } = getGrid(input);
+  const dist = filled(Infinity);
+  const wave = [coords('S', 0)];
 
-  // Get all walkable distances
-  const wave = [[s % (w + 1), Math.floor(s / (w + 1)), 0]];
   for (const [x, y, d] of wave) if (grid[y][x] !== '#' && dist[y][x] === Infinity) {
     dist[y][x] = d;
-    for (const [dx, dy] of dirs) wave.push([x + dx, y + dy, d + 1]);
+    for (const [dx, dy] of NESW) wave.push([x + dx, y + dy, d + 1]);
   }
 
   // Look at every cell and inspect the surrounding cells within `time` steps

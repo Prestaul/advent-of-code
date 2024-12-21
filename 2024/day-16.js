@@ -1,18 +1,16 @@
 #!/usr/bin/env node
 import { exec, test } from '../helpers/exec.js';
 import { Heap } from 'heap-js';
+import { getGrid } from '../helpers/grid.js';
 
 function solve(input, part) {
-  const grid = input.split('\n').map(l => l.split(''));
-  const w = grid[0].length, h = grid.length;
-  const s = input.indexOf('S');
-  const xs = s % (w + 1), ys = Math.floor(s / (w + 1));
-
-  const costs = Array(h).fill().map(_ => Array(w).fill().map(_ => ({
+  const { grid, coords, filled } = getGrid(input);
+  const costs = filled(() => ({
     [-1]: [Infinity],
     [ 0]: { [-1]: Infinity, [1]: Infinity },
     [ 1]: [Infinity]
-  })));
+  }));
+  const [xs, ys] = coords('S');
 
   // Walk the cheapest paths until we reach the exit
   const frontier = new Heap((a, b) => a[4] - b[4]);

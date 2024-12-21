@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { exec, test } from '../helpers/exec.js';
+import { getGrid } from '../helpers/grid.js';
 
 const dirs = {
   '^': [0, -1],
@@ -10,9 +11,7 @@ const dirs = {
 
 function part1(input) {
   const [map, instructions] = input.split('\n\n');
-  const grid = map.split('\n').map(l => l.split(''));
-  const s = map.indexOf('@');
-  const w = grid[0].length;
+  const { grid, coords, reduce, print } = getGrid(map);
 
   function move(x, y, dx, dy) {
     const d = grid[y + dy]?.[x + dx];
@@ -23,9 +22,7 @@ function part1(input) {
     return false;
   }
 
-  let x = s % (w + 1);
-  let y = Math.floor(s / (w + 1));
-
+  let [x, y] = coords('@');
   for (const i of instructions.replaceAll('\n', '')) {
     const [dx, dy] = dirs[i];
     if (move(x, y, dx, dy)) {
@@ -34,22 +31,17 @@ function part1(input) {
     }
   }
 
-  // console.log(grid.map(l => l.join('')).join('\n'));
+  // print();
 
-  let sum = 0;
-  grid.forEach((l, y) => l.forEach((c, x) => sum += c === 'O' && 100 * y + x));
-  return sum;
+  return reduce((sum, c, x, y) => sum + (c === 'O' && 100 * y + x), 0);
 }
 
 function part2(input) {
   let [map, instructions] = input.split('\n\n');
   map = map.replaceAll('#', '##').replaceAll('O', '[]').replaceAll('.', '..').replaceAll('@', '@.');
-  const grid = map.split('\n').map(l => l.split(''));
-  const s = map.indexOf('@');
-  const w = grid[0].length;
+  const { grid, coords, reduce, print } = getGrid(map);
 
-  let x = s % (w + 1);
-  let y = Math.floor(s / (w + 1));
+  let [x, y] = coords('@');
   let dx, dy;
 
   function canMove(x, y) {
@@ -89,11 +81,9 @@ function part2(input) {
     }
   }
 
-  // console.log(grid.map(l => l.join('')).join('\n'));
+  // print();
 
-  let sum = 0;
-  grid.forEach((l, y) => l.forEach((c, x) => sum += c === '[' && 100 * y + x));
-  return sum;
+  return reduce((sum, c, x, y) => sum + (c === '[' && 100 * y + x), 0);
 }
 
 const inputFile = 'inputs/2024/day-15.txt';

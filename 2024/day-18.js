@@ -17,11 +17,10 @@ function part1(input, { size, bytes }) {
     if (grid[y][x] === 1 || grid[y][x] === bytes) continue;
     grid[y][x] = bytes;
 
-    d += 1;
-    if (x < size) wave.push([x+1, y, d]);
-    if (x > 0) wave.push([x-1, y, d]);
-    if (y < size) wave.push([x, y+1, d]);
-    if (y > 0) wave.push([x, y-1, d]);
+    if (x < size) wave.push([x + 1, y, ++d]);
+    if (x > 0) wave.push([x - 1, y, d]);
+    if (y < size) wave.push([x, y + 1, d]);
+    if (y > 0) wave.push([x, y - 1, d]);
   }
 }
 
