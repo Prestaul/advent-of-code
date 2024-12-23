@@ -3,14 +3,14 @@ import { exec, test } from '../helpers/exec.js';
 import { memoize } from '../helpers/memoize.js';
 
 const keyPad = {
-           0:[1,3], A:[2,3],
-  1:[0,2], 2:[1,2], 3:[2,2],
-  4:[0,1], 5:[1,1], 6:[2,1],
   7:[0,0], 8:[1,0], 9:[2,0],
+  4:[0,1], 5:[1,1], 6:[2,1],
+  1:[0,2], 2:[1,2], 3:[2,2],
+  X:[0,3], 0:[1,3], A:[2,3],
 };
 
 const dirPad = {
-             '^':[1,0], 'A':[2,0],
+  'X':[0,0], '^':[1,0], 'A':[2,0],
   '<':[0,1], 'v':[1,1], '>':[2,1],
 };
 
@@ -23,11 +23,9 @@ function getEncoder() {
   const encode = memoize(function (sequence, d, pad = keyPad) {
     let prev = 'A';
     return sequence.split('').reduce((len, key) => {
-      // console.log({ key, prev, sequence, d, pad });
       const [x, y] = pad[prev];
       const [kx, ky] = pad[key];
       const dx = kx - x, dy = ky - y;
-      // console.log({ x, y, kx, ky, dx, dy });
       prev = key;
 
       if (d === 0) return len + Math.abs(dx) + Math.abs(dy) + 1;
@@ -35,11 +33,14 @@ function getEncoder() {
       const xseq = (dx > 0 ? '>' : '<').repeat(Math.abs(dx));
       const yseq = (dy > 0 ? 'v' : '^').repeat(Math.abs(dy));
 
+      const [xx, xy] = pad.X;
       const nextA = encode(xseq + yseq + 'A', d - 1, dirPad);
-      if (dx === 0 || dy === 0 || (pad === keyPad && x === 0 && ky === 3)) return len + nextA;
+      // If we're only moving horizontally or vertically, or if moving vertically first would take us through an empty space
+      if (dx === 0 || dy === 0 || (pad === keyPad && x === 0 && ky === 3) || (pad === dirPad && x === xx && ky === xy)) return len + nextA;
 
       const nextB = encode(yseq + xseq + 'A', d - 1, dirPad);
-      if (pad === keyPad && kx === 0 && y === 3) return len + nextB;
+      // If moving horizontally first would take us through an empty space
+      if ((pad === keyPad && kx === xx && y === xy) || (pad === dirPad && kx === 0 && y === 0)) return len + nextB;
       return len + (nextA < nextB ? nextA : nextB);
     }, 0);
   }, (s, d) => `${s},${d}`);
