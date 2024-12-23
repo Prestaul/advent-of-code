@@ -51,7 +51,7 @@ function part2(input) {
     }
   }
 
-  return [...connected.sort((a, b) => b.size - a.size)[0]].sort().join(',');
+  return [...connected.sort((a, b) => b.size - a.size)[0]].sort();
 }
 
 const inputFile = 'inputs/2024/day-23.txt';
