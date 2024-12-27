@@ -57,9 +57,7 @@ function initialize(values) {
 
 function part2badbits(input) {
   const [init, gates] = input.split('\n\n');
-  // const registers = Object.fromEntries(init.split('\n').map(l => l.split(': ')).map(([k, v]) => [k, Number(v)]));
   const instructions = gates.split('\n').map(l => l.match(/\w{2,3}/g));
-  // console.log(JSON.stringify(instructions));
 
   let x = 0;
   for (let i = 0; i < 45; i++) {
@@ -69,7 +67,6 @@ function part2badbits(input) {
     if ((z ^ (x + 1)) >>> 0) x -= 2 ** i;
   }
   console.log(x.toString(2));
-
 
   // z08, z14/15, z18, z23
 
