@@ -30,7 +30,6 @@ function isValidPart2(n) {
 function isValidPart1(n) {
   const str = String(n);
   const i = str.length / 2;
-  if (i % 1 !== 0) return true;
   return str.slice(0, i) !== str.slice(i);
 
   // First solution:
@@ -42,15 +41,14 @@ function isValidPart1(n) {
 }
 
 function solution(input, isValid) {
-  const invalid = [];
-
   const ranges = input.split(',').map((r) => r.split('-').map(Number));
+  let result = 0;
 
   for (const [min, max] of ranges)
     for (let n = min; n <= max; n++)
-      if (!isValid(n)) invalid.push(n);
+      if (!isValid(n)) result += n;
 
-  return invalid.reduce((a, b) => a + b, 0);
+  return result;
 }
 
 const inputFile = 'inputs/2025/day-02.txt';
