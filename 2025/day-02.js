@@ -40,7 +40,7 @@ function isValidPart1(n) {
   // return left !== right;
 }
 
-function solution(input, isValid) {
+function solve(input, isValid) {
   const ranges = input.split(',').map((r) => r.split('-').map(Number));
   let result = 0;
 
@@ -56,8 +56,8 @@ const sampleInput = `
 11-22,95-115,998-1012,1188511880-1188511890,222220-222224,1698522-1698528,446443-446449,38593856-38593862,565653-565659,824824821-824824827,2121212118-2121212124
 `.trim();
 
-test(solution, sampleInput, 1227775554, isValidPart1);
-exec(solution, inputFile, 55916882972, isValidPart1);
+test(solve, sampleInput, 1227775554, isValidPart1);
+exec(solve, inputFile, 55916882972, isValidPart1);
 
-test(solution, sampleInput, 4174379265, isValidPart2);
-exec(solution, inputFile, 76169125915, isValidPart2);
+test(solve, sampleInput, 4174379265, isValidPart2);
+exec(solve, inputFile, 76169125915, isValidPart2);
