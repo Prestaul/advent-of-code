@@ -4,7 +4,7 @@ import { exec, test } from '../helpers/exec.js';
 function remove(input) {
   const rows = input.split('\n');
   const w = rows[0].length;
-  const h = (input.length + 1) / (w + 1);
+  const h = rows.length;
 
   let remove = [];
   for (let y = 0; y < h; y++)
