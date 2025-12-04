@@ -10,13 +10,11 @@ function solve1(input) {
 
 function solve2(input) {
   let { grid, reduce } = getGrid(input), removed, totalRemoved = 0;
-  do {
-    totalRemoved += removed = reduce((acc, v, x, y) => {
-      const remove = v === '@' && ALL_DIRS.reduce((a, [dx, dy]) => a + (grid[y + dy]?.[x + dx] === '@'), 0) < 4;
-      if (remove) grid[y][x] = 'x';
-      return acc + remove;
-    }, 0);
-  } while (removed > 0);
+  while(removed = reduce((acc, v, x, y) => {
+    const remove = v === '@' && ALL_DIRS.reduce((a, [dx, dy]) => a + (grid[y + dy]?.[x + dx] === '@'), 0) < 4;
+    if (remove) grid[y][x] = 'x';
+    return acc + remove;
+  }, 0)) totalRemoved += removed;
   return totalRemoved;
 }
 
