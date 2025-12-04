@@ -37,7 +37,7 @@ function solve1(input) {
 }
 
 function solve2(input) {
-  let removed = 0, totalRemoved = 0;
+  let removed, totalRemoved = 0;
   do {
     [removed, input] = remove(input);
     totalRemoved += removed;
@@ -62,4 +62,4 @@ test(solve1, sampleInput, 13);
 exec(solve1, inputFile, 1424);
 
 test(solve2, sampleInput, 43);
-exec(solve2, inputFile, null);
+exec(solve2, inputFile, 8727);

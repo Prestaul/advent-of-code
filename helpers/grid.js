@@ -1,6 +1,7 @@
 export const NESW = [[-1, 0], [0, 1], [1, 0], [0, -1]];
 export const ESWN = [[0, 1], [1, 0], [0, -1], [-1, 0]];
 export const NSWE = [[-1, 0], [1, 0], [0, -1], [0, 1], ];
+export const DIAGS = [[-1, -1], [-1, 1], [1, 1], [1, -1]];
 
 function isFn(v) {
   return typeof v === 'function';
