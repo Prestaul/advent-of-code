@@ -9,7 +9,7 @@ function part2(input) {
   return input.split('\n').map(Number).reduce((a, b) => a + b);
 }
 
-const inputFile = 'inputs/2024/day-DD.txt';
+const inputFile = 'inputs/2025/day-DD.txt';
 const sampleInput = `
 123`.trim();
 
