@@ -1,12 +1,14 @@
 #!/usr/bin/env node
 import { exec, test } from '../helpers/exec.js';
 
+const doOp = (op, terms) => op === '*' ? terms.reduce((a, b) => a * b, 1) : terms.reduce((a, b) => a + b, 0);
+
 function part1(input) {
   const lines = input.split('\n');
   const ops = lines.pop().trim().split(/\s+/);
   const rows = lines.map(line => line.trim().split(/\s+/).map(Number));
 
-  return ops.reduce((sum, op, i) => sum + rows.reduce((acc, val) => op === '*' ? acc * val[i] : acc + val[i], op === '*' ? 1 : 0), 0);
+  return ops.reduce((sum, op, i) => sum + doOp(op, rows.map(row => row[i])), 0);
 }
 
 function part2(input) {
@@ -17,20 +19,21 @@ function part2(input) {
   const max = Math.max(...lines.map(l => l.length));
 
   return ops.reduce((sum, op) => {
-    let result = op === '*' ? 1 : 0;
+    const terms = [];
 
     while (col < max) {
       const digits = lines.map(line => line[col] ?? ' ');
       col++;
+
       if (digits.every(d => d === ' ')) break;
-      const val = digits.reduce((v, d) => {
+
+      terms.push(digits.reduce((v, d) => {
         if (d === ' ') return v;
         return v * 10 + Number(d);
-      }, 0);
-      result = op === '*' ? result * val : result + val;
+      }, 0));
     }
 
-    return sum + result;
+    return sum + doOp(op, terms);
   }, 0);
 }
 
