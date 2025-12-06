@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { exec, test } from '../helpers/exec.js';
 
-const doOp = (op, terms) => op === '*' ? terms.reduce((a, b) => a * b, 1) : terms.reduce((a, b) => a + b, 0);
+const doOp = (op, terms) => op === '*' ? terms.reduce((a, b) => a * (b || 1), 1) : terms.reduce((a, b) => a + (b || 0));
 
 function part1(input) {
   const lines = input.split('\n');
@@ -15,26 +15,14 @@ function part2(input) {
   const lines = input.split('\n');
   const ops = lines.pop().trim().split(/\s+/);
 
-  let col = 0;
-  const max = Math.max(...lines.map(l => l.length));
+  const terms = Array.from(
+    { length: Math.max(...lines.map(l => l.length)) },
+    (_, i) => parseInt(lines.map(line => line[i] ?? '').join('').trim(), 10)
+  );
 
-  return ops.reduce((sum, op) => {
-    const terms = [];
+  // Terms is now an array of numbers split by NaN between operations
 
-    while (col < max) {
-      const digits = lines.map(line => line[col] ?? ' ');
-      col++;
-
-      if (digits.every(d => d === ' ')) break;
-
-      terms.push(digits.reduce((v, d) => {
-        if (d === ' ') return v;
-        return v * 10 + Number(d);
-      }, 0));
-    }
-
-    return sum + doOp(op, terms);
-  }, 0);
+  return ops.reduce((sum, op) => sum + doOp(op, terms.splice(0, (terms.findIndex(t => isNaN(t)) + 1) || 9999)), 0);
 }
 
 const inputFile = 'inputs/2025/day-06.txt';
