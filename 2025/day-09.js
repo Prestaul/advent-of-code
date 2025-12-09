@@ -37,8 +37,7 @@ function part2(input, xFill, yFill) {
     for (let x = xPrev, y = yPrev, dx = Math.sign(xCurr - xPrev), dy = Math.sign(yCurr - yPrev); x !== xCurr || y !== yCurr; x += dx, y += dy)
       grid[y][x] = 'X';
 
-    xPrev = xCurr;
-    yPrev = yCurr;
+    xPrev = xCurr, yPrev = yCurr;
   }
 
   // Fill from the given point (cheating by just passing in any point we know is inside)
@@ -50,16 +49,14 @@ function part2(input, xFill, yFill) {
     for (let [dx, dy] of NESW) frontier.push([x + dx, y + dy]);
   }
 
-  // Print the compressed grid for debugging
-  // console.log(grid.map(row => row.join('')).join('\n'));
-
   // Find the largest rectangle that doesn't include any points outside the shape
   let maxArea = 0;
+  let p1, p2;
   for (let i = 0; i < compressed.length; i++) {
     const [x1, y1] = compressed[i];
     nextCorner: for (let j = i + 1; j < compressed.length; j++) {
       const [x2, y2] = compressed[j];
-      // if there are any empty spaces inside the rectangle, skip it
+      // Discard if there are any outside points within the rectangle
       for (let y = Math.min(y1, y2), yMax = Math.max(y1, y2); y <= yMax; y++)
         for (let x = Math.min(x1, x2), xMax = Math.max(x1, x2); x <= xMax; x++)
           if (grid[y][x] === '.')
@@ -68,9 +65,19 @@ function part2(input, xFill, yFill) {
       // Use uncompressed points to calculate area
       const [ux1, uy1] = uncompress([x1, y1]);
       const [ux2, uy2] = uncompress([x2, y2]);
-      maxArea = Math.max(maxArea, (Math.abs(ux1 - ux2) + 1) * (Math.abs(uy1 - uy2) + 1));
+      const area = (Math.abs(ux1 - ux2) + 1) * (Math.abs(uy1 - uy2) + 1);
+      if (area > maxArea) p1 = [x1, y1], p2 = [x2, y2], maxArea = area;
     }
   }
+
+  // Mark the largest rectangle on the grid
+  // for (let [x, y] = p1, [x2, y2] = p2, dx = Math.sign(x2 - x), dy = Math.sign(y2 - y); y !== y2 + dy; y += dy)
+  //   for ([x] = p1; x !== x2 + dx; x += dx)
+  //     grid[y][x] = '🀫';
+
+  // Print the compressed grid for debugging
+  // console.log(grid.map(row => row.join('')).join('\n'));
+
   return maxArea;
 }
 
