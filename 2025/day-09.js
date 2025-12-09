@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { exec, test } from '../helpers/exec.js';
-import { compress } from '../helpers/coordinate-compression.js';
+import { compressPoints } from '../helpers/coordinate-compression.js';
 import { NESW } from '../helpers/grid.js';
 
 function part1(input) {
@@ -18,35 +18,30 @@ function part1(input) {
 
 function part2(input, xFill, yFill) {
   const points = input.split('\n').map(l => l.split(',').map(Number));
-  const xScale = compress(points.map(p => p[0]));
-  const yScale = compress(points.map(p => p[1]));
 
-  const w = xScale.count + 1;
-  const h = yScale.count + 1;
-  const grid = Array.from({ length: h }, () => Array.from({ length: w }, () => '.'));
+  // Compress the points so we can work on a smaller grid
+  const { axes, uncompress, compressed } = compressPoints(points);
 
-  const compressedXs = xScale.compressed;
-  const compressedYs = yScale.compressed;
-  compressedXs.push(compressedXs[0]);
-  compressedYs.push(compressedYs[0]);
+  const grid = Array.from({ length: axes[1].count + 1 }, () => Array.from({ length: axes[0].count + 1 }, () => '.'));
 
-  let xPrev = compressedXs[0];
-  let yPrev = compressedYs[0];
+  // Add first point to the end to close the loop
+  compressed.push(compressed[0]);
+
+  // Follow the edges and mark them on the grid
+  let [xPrev, yPrev] = compressed[0];
   grid[yPrev][xPrev] = '#';
-  for (let i = 1; i < compressedXs.length; i++) {
-    const xCurr = compressedXs[i];
-    const yCurr = compressedYs[i];
-
-    if (xCurr === xPrev)
-      for (let y = Math.min(yPrev, yCurr) + 1, yMax = Math.max(yPrev, yCurr) - 1; y <= yMax; y++) grid[y][xCurr] = 'X';
-    else
-      for (let x = Math.min(xPrev, xCurr) + 1, xMax = Math.max(xPrev, xCurr) - 1; x <= xMax; x++) grid[yCurr][x] = 'X';
-
+  for (let i = 1; i < compressed.length; i++) {
+    const [xCurr, yCurr] = compressed[i];
     grid[yCurr][xCurr] = '#';
+
+    for (let x = xPrev, y = yPrev, dx = Math.sign(xCurr - xPrev), dy = Math.sign(yCurr - yPrev); x !== xCurr || y !== yCurr; x += dx, y += dy)
+      grid[y][x] = 'X';
+
     xPrev = xCurr;
     yPrev = yCurr;
   }
 
+  // Fill from the given point (cheating by just passing in any point we know is inside)
   const frontier = [[xFill, yFill]];
   while(frontier.length) {
     const [x, y] = frontier.pop();
@@ -55,23 +50,25 @@ function part2(input, xFill, yFill) {
     for (let [dx, dy] of NESW) frontier.push([x + dx, y + dy]);
   }
 
-
+  // Print the compressed grid for debugging
   // console.log(grid.map(row => row.join('')).join('\n'));
 
+  // Find the largest rectangle that doesn't include any points outside the shape
   let maxArea = 0;
-  for (let i = 0; i < compressedXs.length; i++) {
-    const x1 = compressedXs[i];
-    const y1 = compressedYs[i];
-    nextCorner: for (let j = i + 1; j < compressedXs.length; j++) {
-      const x2 = compressedXs[j];
-      const y2 = compressedYs[j];
-      // if there are any periods ('.') inside the rectangle, skip it
+  for (let i = 0; i < compressed.length; i++) {
+    const [x1, y1] = compressed[i];
+    nextCorner: for (let j = i + 1; j < compressed.length; j++) {
+      const [x2, y2] = compressed[j];
+      // if there are any empty spaces inside the rectangle, skip it
       for (let y = Math.min(y1, y2), yMax = Math.max(y1, y2); y <= yMax; y++)
         for (let x = Math.min(x1, x2), xMax = Math.max(x1, x2); x <= xMax; x++)
           if (grid[y][x] === '.')
             continue nextCorner;
 
-      maxArea = Math.max(maxArea, (Math.abs(xScale.uncompress(x1) - xScale.uncompress(x2)) + 1) * (Math.abs(yScale.uncompress(y1) - yScale.uncompress(y2)) + 1));
+      // Use uncompressed points to calculate area
+      const [ux1, uy1] = uncompress([x1, y1]);
+      const [ux2, uy2] = uncompress([x2, y2]);
+      maxArea = Math.max(maxArea, (Math.abs(ux1 - ux2) + 1) * (Math.abs(uy1 - uy2) + 1));
     }
   }
   return maxArea;

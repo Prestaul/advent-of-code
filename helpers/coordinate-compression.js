@@ -1,3 +1,5 @@
+import { transpose } from "./matrix.js";
+
 export function compress(values) {
   const uniques = new Set(values);
   const index = [...uniques].sort((a, b) => a - b);
@@ -23,5 +25,17 @@ export function compress(values) {
     count: index.length,
     compress,
     uncompress,
+  };
+}
+
+export function compressPoints(points) {
+  const axes = transpose(points).map(coordinate => compress(coordinate));
+
+  return {
+    compressed: transpose(axes.map(axis => axis.compressed)),
+    // compressed: points.map(point => point.map((v, i) => axes[i].compress(v))),
+    axes,
+    compress: point => point.map((v, i) => axes[i].compress(v)),
+    uncompress: point => point.map((v, i) => axes[i].uncompress(v)),
   };
 }
