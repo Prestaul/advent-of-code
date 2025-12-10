@@ -17,21 +17,18 @@ function part1(input) {
     for (let comb = 0; comb < totalCombinations; comb++) {
       const state = Array.from({ length: target.length }, () => false);
       const presses = [];
-      for (let b = 0; b < buttons.length; b++) {
+
+      for (let b = 0; b < buttons.length; b++)
         if (comb & (1 << b)) presses.push(b);
-      }
 
       // Apply the button presses
-      for (const b of presses) {
-        for (const pos of buttons[b]) {
+      for (const b of presses)
+        for (const pos of buttons[b])
           state[pos] = !state[pos];
-        }
-      }
 
       // Check if the state matches the target
-      if (state.every((v, i) => v === target[i])) {
+      if (state.every((v, i) => v === target[i]))
         minPresses = Math.min(minPresses, presses.length);
-      }
     }
 
     return sum + (minPresses === Infinity ? 0 : minPresses);
