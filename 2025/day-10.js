@@ -4,8 +4,7 @@ import { solve } from "yalps"
 
 function part1(input) {
   return input.split('\n').map(l => {
-    let [target, ...buttons] = l.split(' ');
-    buttons.pop(); // Remove the trailing {...}
+    const [target, ...buttons] = l.split(' ').slice(0, -1);
     return [
       target.slice(1, -1).split('').map(c => c === '#'),
       buttons.map(b => b.slice(1, -1).split(',').map(Number)),
