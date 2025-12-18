@@ -4,12 +4,12 @@ import { getGrid, NESW, DIAGS } from '../helpers/grid.js';
 const ALL_DIRS = NESW.concat(DIAGS);
 
 function solve1(input) {
-  let { grid, reduce } = getGrid(input);
+  let { grid, reduce } = getGrid({ input });
   return reduce((acc, v, x, y) => acc + (v === '@' && ALL_DIRS.reduce((a, [dx, dy]) => a + (grid[y + dy]?.[x + dx] === '@'), 0) < 4), 0);
 }
 
 function solve2(input) {
-  let { grid, reduce } = getGrid(input), removed, totalRemoved = 0;
+  let { grid, reduce } = getGrid({ input }), removed, totalRemoved = 0;
   while(removed = reduce((acc, v, x, y) => {
     const remove = v === '@' && ALL_DIRS.reduce((a, [dx, dy]) => a + (grid[y + dy]?.[x + dx] === '@'), 0) < 4;
     if (remove) grid[y][x] = 'x';

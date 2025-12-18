@@ -11,7 +11,7 @@ const dirs = {
 
 function part1(input) {
   const [map, instructions] = input.split('\n\n');
-  const { grid, coords, reduce, print } = getGrid(map);
+  const { grid, coords, reduce, print } = getGrid({ input: map });
 
   function move(x, y, dx, dy) {
     const d = grid[y + dy]?.[x + dx];
@@ -39,7 +39,7 @@ function part1(input) {
 function part2(input) {
   let [map, instructions] = input.split('\n\n');
   map = map.replaceAll('#', '##').replaceAll('O', '[]').replaceAll('.', '..').replaceAll('@', '@.');
-  const { grid, coords, reduce, print } = getGrid(map);
+  const { grid, coords, reduce, print } = getGrid({ input: map });
 
   let [x, y] = coords('@');
   let dx, dy;

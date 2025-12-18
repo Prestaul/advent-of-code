@@ -4,7 +4,7 @@ import { Heap } from 'heap-js';
 import { getGrid } from '../helpers/grid.js';
 
 function solve(input, part) {
-  const { grid, coords, filled } = getGrid(input);
+  const { grid, coords, filled } = getGrid({ input });
   const costs = filled(() => ({
     [-1]: [Infinity],
     [ 0]: { [-1]: Infinity, [1]: Infinity },

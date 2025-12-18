@@ -3,7 +3,7 @@ import { exec, test } from '../helpers/exec.js';
 import { getGrid, NESW } from '../helpers/grid.js';
 
 function solve(input, time, limit = 100) {
-  const { grid, w, h, coords, filled } = getGrid(input);
+  const { grid, w, h, coords, filled } = getGrid({ input });
   const dist = filled(Infinity);
   const wave = [coords('S', 0)];
 
